@@ -16,6 +16,7 @@ public class DriveTrain {
 	
 	//create DoubleSolenoids for gears.
 	static DoubleSolenoid doubleSolenoid = new DoubleSolenoid(0,0,1);
+	static boolean highGear = false;
 	
 	public static void setup(){
 		//set parameters for drivesystem
@@ -26,8 +27,8 @@ public class DriveTrain {
         robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
 	}
 	
-	public static void move (double y, double z){
-		robotDrive.arcadeDrive(-y, -z);
+	public static void move (double y, double z){		
+			robotDrive.arcadeDrive(-y, -z);	
 	}
 
 	public static void joyMove(){
@@ -39,10 +40,11 @@ public class DriveTrain {
 	}
 	
 	public static void highGear(){
-		doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+		doubleSolenoid.set(DoubleSolenoid.Value.kForward);
 	}
 	
 	public static void lowGear(){
-		doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+		doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+
 	}
 }

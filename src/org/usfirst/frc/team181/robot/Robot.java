@@ -71,13 +71,15 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		DriveTrain.joyMove();
-	}
+		joyStick.doButtons();
+			}
 
 	/**
 	 * This function is called periodically during test mode
 	 */
 	@Override
 	public void testPeriodic() {
+	//System.out.println(joyStick.joystick.getRawButton(1));	
 	}
 }
 
