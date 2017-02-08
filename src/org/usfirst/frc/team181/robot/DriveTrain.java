@@ -27,22 +27,24 @@ public class DriveTrain {
         robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
 	}
 	
+	//drive the robot with specified speeds.
 	public static void move (double y, double z){		
 			robotDrive.arcadeDrive(-y, -z);	
 	}
 
+	//drive the robot with joystick input
 	public static void joyMove(){
 		robotDrive.arcadeDrive(-joyStick.getY(), -joyStick.getZ());
 	}
-	
+	//stop the robot from moveing
 	public static void stop(){
 		robotDrive.stopMotor();
 	}
-	
+	//turn on high gear
 	public static void highGear(){
 		doubleSolenoid.set(DoubleSolenoid.Value.kForward);
 	}
-	
+	//turn on low gear
 	public static void lowGear(){
 		doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
 

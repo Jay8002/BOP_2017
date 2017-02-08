@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
+	//create needed variables for smart dashboard
 	final String defaultAuto = "Default";
 	final String customAuto = "My Auto";
 	String autoSelected;
@@ -27,6 +28,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
+		//set up smart dashboard
 		chooser.addDefault("Default Auto", defaultAuto);
 		chooser.addObject("My Auto", customAuto);
 		SmartDashboard.putData("Auto choices", chooser);
@@ -56,6 +58,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		//this switch selects what autonomous mode the robot is going to be put in.
 		switch (autoSelected) {
 		case customAuto:
 			// Put custom auto code here
@@ -72,7 +75,9 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		//moves the robot in accordance with the joystick.
 		DriveTrain.joyMove();
+		//check to see if any buttons are being pressed on the joystick
 		joyStick.doButtons();
 	}
 
