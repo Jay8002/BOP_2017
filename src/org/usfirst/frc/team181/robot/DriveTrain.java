@@ -1,10 +1,11 @@
 package org.usfirst.frc.team181.robot;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 //import needed libraries
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.Encoder;
 
 public class DriveTrain {
 	//create two speed controllers for right and left.
@@ -14,39 +15,58 @@ public class DriveTrain {
 	//create drivesystem for robot, using speed controllers.
 	public static RobotDrive robotDrive = new RobotDrive(driveTrainLeft, driveTrainRight);
 	
+	//Encoder
+	static Encoder leftEncoder = new Encoder(2, 1, true, Encoder.EncodingType.k4X);
+	static Encoder rightEncoder = new Encoder(0, 3, false, Encoder.EncodingType.k4X);
+	
 	//create DoubleSolenoids for gears.
 	static DoubleSolenoid doubleSolenoid = new DoubleSolenoid(0,0,1);
 	static boolean highGear = false;
 	
 	public static void setup(){
-		//set parameters for drivesystem
+		//set parameters for drive system
         robotDrive.setSafetyEnabled(true);
         robotDrive.setExpiration(0.1);
         robotDrive.setSensitivity(0.5);
         robotDrive.setMaxOutput(1.0);
         robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+        //set parameters for left encoder
+        leftEncoder.setDistancePerPulse(1);
+        //set parameters for right encoder
+        rightEncoder.setDistancePerPulse(1);
+        
 	}
 	
-	//drive the robot with specified speeds.
-	public static void move (double y, double z){		
+	public static void move (double y, double z){ 		
 			robotDrive.arcadeDrive(-y, -z);	
 	}
 
-	//drive the robot with joystick input
-	public static void joyMove(){
+	public static void joyMove() {
 		robotDrive.arcadeDrive(-joyStick.getY(), -joyStick.getZ());
 	}
-	//stop the robot from moveing
-	public static void stop(){
+	
+	public static void stop() {
 		robotDrive.stopMotor();
 	}
-	//turn on high gear
-	public static void highGear(){
+	
+	public static void highGear() {
 		doubleSolenoid.set(DoubleSolenoid.Value.kForward);
 	}
-	//turn on low gear
-	public static void lowGear(){
+	
+	public static void lowGear() {
 		doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
-
+	}
+	
+	public static double readEncoderL() {
+		return leftEncoder.getDistance();
+	}
+	public static double readEncoderR() {
+		return rightEncoder.getDistance();
+	}
+	public static void resetEncoders() {
+		leftEncoder.reset();
+		rightEncoder.reset();
 	}
 }
+	
+	
