@@ -1,30 +1,39 @@
 package org.usfirst.frc.team181.robot;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
-
-/**
- * The camera is connected to the robot controller through a Wi-Fi bridge
- * and through an Arduino Uno. The Arduino interprets commands sent to it
- * by the robot controller - namely, to operate the camera - and then
- * sends the data it receives back through the Wi-Fi bridge to the robot
- * controller.
- * 
- * The robot controller communicates with the Arduino through this class.
- * 
- * @author BOP Admin
- *
- */
 public class Arduino {
 	
-	private ComPortIndentifier port;
-	
-	/**
-	 * Exactly what it says on the tin.
-	 */
-	public void ReadBytes() {
+	public static void read_constant() throws IOException{
+		
+		//open the input file coming from the Arduino
+		FileReader file = new FileReader("/dev/ttyACM0");
+		//This variable is able to preform functions on the previously opened file.
+		BufferedReader input = new BufferedReader(file);
+		
+		//loop until there is still things to read. If the arduino stops sending, this will stop reading.
+		for(int i=0; i<=300; i++){
+			//print the following message
+			System.out.println("Serial input: (" + input.readLine() + ")");
+			
+		}
+		//close the file, so that we do not have problems with it.
+		file.close();
 		
 	}
 	
+	public static void readOnce() throws IOException{
+		//open the input file coming from the Arduino
+		FileReader file = new FileReader("/dev/ttyACM0");
+		//This variable is able to preform functions on the previously opened file.
+		BufferedReader input = new BufferedReader(file);
+		
+			//print the following message
+			System.out.println("Serial input: (" + input.readLine() + ")");
+		//close the file, so that we do not have problems with it.
+		file.close();
+	}
+
 }

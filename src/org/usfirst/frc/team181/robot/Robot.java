@@ -1,5 +1,7 @@
 package org.usfirst.frc.team181.robot;
 
+import java.io.IOException;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -72,14 +74,22 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		DriveTrain.joyMove();
 		joyStick.doButtons();
-			}
+	}
 
 	/**
 	 * This function is called periodically during test mode
 	 */
 	@Override
 	public void testPeriodic() {
-	//System.out.println(joyStick.joystick.getRawButton(1));	
+	//System.out.println(joyStick.joystick.getRawButton(1));
+		
+	//try to do the following command
+	try {
+		Arduino.readOnce();
+	//If it does not work do the following
+	} catch (IOException e) {
+		System.out.println("ERROR Reading From Arduino!");
+	}
 	}
 }
 
