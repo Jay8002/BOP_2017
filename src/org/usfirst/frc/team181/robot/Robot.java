@@ -3,6 +3,9 @@ package org.usfirst.frc.team181.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import java.io.IOException;
+
 import edu.wpi.first.wpilibj.CameraServer;
 
 /**
@@ -90,9 +93,15 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-	//System.out.println(joyStick.joystick.getRawButton(1));
-		//Arduino.ListSerialPorts();
-	
+		//System.out.println(joyStick.joystick.getRawButton(1));
+		
+		//try to do the following command
+		try {
+			Arduino.readOnce();
+		//If it does not work do the following
+		} catch (IOException e) {
+			System.out.println("ERROR Reading From Arduino!");
+		}
 	}
 }
 
