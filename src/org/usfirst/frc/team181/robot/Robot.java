@@ -3,6 +3,7 @@ package org.usfirst.frc.team181.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.CameraServer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -17,8 +18,6 @@ public class Robot extends IterativeRobot {
 	String autoSelected;
 	SendableChooser<String> chooser = new SendableChooser<>();
 	
-	
-	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -28,6 +27,8 @@ public class Robot extends IterativeRobot {
 		chooser.addDefault("Default Auto", defaultAuto);
 		chooser.addObject("My Auto", customAuto);
 		SmartDashboard.putData("Auto choices", chooser);
+		CameraServer.getInstance().startAutomaticCapture();
+		
 	}
 
 	/**
@@ -47,6 +48,7 @@ public class Robot extends IterativeRobot {
 		// autoSelected = SmartDashboard.getString("Auto Selector",
 		// defaultAuto);
 		System.out.println("Auto selected: " + autoSelected);
+		DriveTrain.resetEncoders();
 	}
 
 	/**
@@ -56,7 +58,14 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		switch (autoSelected) {
 		case customAuto:
-			// Put custom auto code here
+			if(DriveTrain.readEncoderL() < 1000) {
+				DriveTrain.move(-0.6, 0);
+			}
+			else if(DriveTrain.readEncoderL() > 1000) {
+				DriveTrain.stop();
+			}
+			SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
+			SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
 			break;
 		case defaultAuto:
 		default:
@@ -72,6 +81,8 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		DriveTrain.joyMove();
 		joyStick.doButtons();
+		SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
+		SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
 			}
 
 	/**
@@ -79,7 +90,9 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-	//System.out.println(joyStick.joystick.getRawButton(1));	
+	//System.out.println(joyStick.joystick.getRawButton(1));
+		//Arduino.ListSerialPorts();
+	
 	}
 }
 

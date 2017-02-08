@@ -18,7 +18,7 @@ import java.util.*;
  */
 public class Arduino {
 	
-	private ComPortIndentifier port;
+	//private ComPortIndentifier port;
 	
 	/**
 	 * Exactly what it says on the tin.
