@@ -1,10 +1,9 @@
 package org.usfirst.frc.team181.robot;
 
-import java.io.IOException;
-
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.CameraServer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -14,13 +13,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	//create needed variables for smart dashboard
 	final String defaultAuto = "Default";
 	final String customAuto = "My Auto";
 	String autoSelected;
 	SendableChooser<String> chooser = new SendableChooser<>();
-	
-	
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -28,10 +24,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		//set up smart dashboard
 		chooser.addDefault("Default Auto", defaultAuto);
 		chooser.addObject("My Auto", customAuto);
 		SmartDashboard.putData("Auto choices", chooser);
+		CameraServer.getInstance().startAutomaticCapture();
+		
 	}
 
 	/**
@@ -51,6 +48,7 @@ public class Robot extends IterativeRobot {
 		// autoSelected = SmartDashboard.getString("Auto Selector",
 		// defaultAuto);
 		System.out.println("Auto selected: " + autoSelected);
+		DriveTrain.resetEncoders();
 	}
 
 	/**
@@ -58,10 +56,16 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		//this switch selects what autonomous mode the robot is going to be put in.
 		switch (autoSelected) {
 		case customAuto:
-			// Put custom auto code here
+			if(DriveTrain.readEncoderL() < 1000) {
+				DriveTrain.move(-0.6, 0);
+			}
+			else if(DriveTrain.readEncoderL() > 1000) {
+				DriveTrain.stop();
+			}
+			SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
+			SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
 			break;
 		case defaultAuto:
 		default:
@@ -75,11 +79,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		//moves the robot in accordance with the joystick.
 		DriveTrain.joyMove();
-		//check to see if any buttons are being pressed on the joystick
 		joyStick.doButtons();
-	}
+		SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
+		SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
+			}
 
 	/**
 	 * This function is called periodically during test mode
@@ -87,14 +91,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 	//System.out.println(joyStick.joystick.getRawButton(1));
-		
-	//try to do the following command
-	try {
-		Arduino.readOnce();
-	//If it does not work do the following
-	} catch (IOException e) {
-		System.out.println("ERROR Reading From Arduino!");
-	}
+		//Arduino.ListSerialPorts();
+	
 	}
 }
 
