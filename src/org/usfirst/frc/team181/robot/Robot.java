@@ -32,6 +32,11 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Auto choices", chooser);
 		CameraServer.getInstance().startAutomaticCapture();
 		
+		//Zero out and get the Yaw of the robot from the Gyro
+		DriveTrain.zeroYaw();
+		
+		
+		
 	}
 
 	/**
@@ -84,9 +89,14 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		DriveTrain.joyMove();
 		joyStick.doButtons();
+		
+		//put the data on the smart dashboard for the encoders.
 		SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
 		SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
-			}
+		
+		SmartDashboard.putBoolean("Gyro Calibrating", DriveTrain.isCalibrating());
+		SmartDashboard.putNumber("Yaw: ", DriveTrain.getYaw());
+	}
 
 	/**
 	 * This function is called periodically during test mode
@@ -94,6 +104,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		//System.out.println(joyStick.joystick.getRawButton(1));
+		
 		
 		//try to do the following command
 		try {

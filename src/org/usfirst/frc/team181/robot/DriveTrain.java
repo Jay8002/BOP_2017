@@ -3,14 +3,18 @@ package org.usfirst.frc.team181.robot;
 //import needed libraries
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Encoder;
+import com.kauailabs.navx.frc.AHRS;
 
 public class DriveTrain {
 	//create two speed controllers for right and left.
 	static SpeedController driveTrainLeft = new VictorSP(0);
 	static SpeedController driveTrainRight = new VictorSP(1);
+	static AHRS ahrs = new AHRS(SPI.Port.kMXP);
 	
 	//create drivesystem for robot, using speed controllers.
 	public static RobotDrive robotDrive = new RobotDrive(driveTrainLeft, driveTrainRight);
@@ -66,6 +70,18 @@ public class DriveTrain {
 	public static void resetEncoders() {
 		leftEncoder.reset();
 		rightEncoder.reset();
+	}
+	
+	public static void zeroYaw(){
+		ahrs.zeroYaw();
+	}
+	
+	public static double getYaw(){
+		return ahrs.getYaw();
+	}
+
+	public static boolean isCalibrating(){
+		return ahrs.isCalibrating();
 	}
 }
 	
