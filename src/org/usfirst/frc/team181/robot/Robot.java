@@ -17,7 +17,13 @@ import edu.wpi.first.wpilibj.CameraServer;
  */
 public class Robot extends IterativeRobot {
 	final String defaultAuto = "Default";
+<<<<<<< HEAD
 	final String customAuto = "My Auto";
+	final String autoTurning = "Turning";
+=======
+	final String customAuto1 = "Encoder Auto";
+	final String customAuto2 = "Gyro Auto";
+>>>>>>> master
 	String autoSelected;
 	SendableChooser<String> chooser = new SendableChooser<>();
 	
@@ -28,12 +34,19 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		chooser.addDefault("Default Auto", defaultAuto);
+<<<<<<< HEAD
 		chooser.addObject("My Auto", customAuto);
+		chooser.addObject("Turning", autoTurning);
+=======
+		chooser.addObject("Encoder Auto", customAuto1);
+		chooser.addObject("Gyro Auto", customAuto2);
+>>>>>>> master
 		SmartDashboard.putData("Auto choices", chooser);
 		CameraServer.getInstance().startAutomaticCapture();
 		
 		//Zero out and get the Yaw of the robot from the Gyro
 		DriveTrain.zeroYaw();
+		double Kp = 0.03;
 		
 		
 		
@@ -57,6 +70,8 @@ public class Robot extends IterativeRobot {
 		// defaultAuto);
 		System.out.println("Auto selected: " + autoSelected);
 		DriveTrain.resetEncoders();
+		//Zero out and get the Yaw of the robot from the Gyro
+		DriveTrain.zeroYaw();
 	}
 
 	/**
@@ -65,7 +80,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		switch (autoSelected) {
-		case customAuto:
+		case customAuto1:
 			if(DriveTrain.readEncoderL() < 1000) {
 				DriveTrain.move(-0.6, 0);
 			}
@@ -75,7 +90,19 @@ public class Robot extends IterativeRobot {
 			SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
 			SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
 			break;
+<<<<<<< HEAD
+		case autoTurning:
+			//DriveTrain.move(DriveTrain.toClicks(35));
+			DriveTrain.turn(90);
+			
+=======
+		case customAuto2:
+			DriveTrain.zeroYaw();  //zero encoder yaw axis
+			while (isAutonomous()) {
+				
+			}
 		case defaultAuto:
+>>>>>>> master
 		default:
 			// Put default auto code here
 			break;
@@ -92,11 +119,13 @@ public class Robot extends IterativeRobot {
 		
 		//put the data on the smart dashboard for the encoders.
 		SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
-		SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
-		
+		SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());		
 		SmartDashboard.putBoolean("Gyro Calibrating", DriveTrain.isCalibrating());
 		SmartDashboard.putNumber("Yaw: ", DriveTrain.getYaw());
+		SmartDashboard.putNumber("Shooter Power", joyStick.getSlider());
 	}
+
+	
 
 	/**
 	 * This function is called periodically during test mode
@@ -104,15 +133,16 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		//System.out.println(joyStick.joystick.getRawButton(1));
+		System.out.println(DriveTrain.getYaw());
 		
-		
-		//try to do the following command
+		/*try to do the following command
 		try {
 			Arduino.readOnce();
 		//If it does not work do the following
 		} catch (IOException e) {
 			System.out.println("ERROR Reading From Arduino!");
 		}
+		*/
 	}
 }
 

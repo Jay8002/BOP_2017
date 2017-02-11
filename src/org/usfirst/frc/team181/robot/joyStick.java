@@ -1,7 +1,7 @@
 package org.usfirst.frc.team181.robot;
 
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.Joystick;
 
 public class joyStick {
 
@@ -36,7 +36,12 @@ public class joyStick {
 			Mechanisms.collectorClosed();
 			collector_open = false;
 		}	 		 			
-		
+		if(opStick.getRawButton(1) == true) {
+			Mechanisms.shooterOn();
+		}
+		if(opStick.getRawButton(1) == false) {
+			Mechanisms.shooterOff();
+		}
 	}
 	
 	
@@ -49,6 +54,8 @@ public class joyStick {
 	public static double getZ(){	
 		return joystick.getZ();
 	}
-	
+	public static double getSlider() {
+		return opStick.getThrottle();
+	}
 	
 }

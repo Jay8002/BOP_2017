@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Encoder;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -42,17 +41,47 @@ public class DriveTrain {
 	}
 	
 	public static void move (double y, double z){ 		
-			robotDrive.arcadeDrive(-y, -z);	
+			robotDrive.arcadeDrive(-y, -z + 0.1);	
 	}
 
+	public static void move (int clicks){
+		if (DriveTrain.readEncoderL() <= clicks && DriveTrain.readEncoderR() <= clicks){
+			DriveTrain.move(-0.6, -0.1);
+		}
+	}
+	
+	public static void move (double inches){
+		if (DriveTrain.readEncoderL() <= inches && DriveTrain.readEncoderR() <= inches){
+			DriveTrain.move(-0.6, -0.1);
+		}
+	}
+	
 	public static void joyMove() {
-		robotDrive.arcadeDrive(-joyStick.getY(), -joyStick.getZ());
+		robotDrive.arcadeDrive(-joyStick.getY(), -joyStick.getZ() + -0.1);
+	}
+	
+	public static void turn(int angle){
+		//Zero out and get the Yaw of the robot from the Gyro
+		for (double i = getYaw();  i >= angle+5 || i <= angle-5 ; i = getYaw()){
+			if (i < angle){
+				move(0, .8);
+				stop();
+			}
+			if (i > angle){
+				move(0, -.8);
+				stop();
+			}
+		}
 	}
 	
 	public static void stop() {
 		robotDrive.stopMotor();
 	}
 	
+	
+	public static double toClicks(int inches){
+		return (inches * 19.04761905);
+	}
 	public static void highGear() {
 		doubleSolenoid.set(DoubleSolenoid.Value.kForward);
 	}
