@@ -17,7 +17,8 @@ import edu.wpi.first.wpilibj.CameraServer;
  */
 public class Robot extends IterativeRobot {
 	final String defaultAuto = "Default";
-	final String customAuto = "My Auto";
+	final String customAuto1 = "Encoder Auto";
+	final String customAuto2 = "Gyro Auto";
 	String autoSelected;
 	SendableChooser<String> chooser = new SendableChooser<>();
 	
@@ -28,12 +29,14 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		chooser.addDefault("Default Auto", defaultAuto);
-		chooser.addObject("My Auto", customAuto);
+		chooser.addObject("Encoder Auto", customAuto1);
+		chooser.addObject("Gyro Auto", customAuto2);
 		SmartDashboard.putData("Auto choices", chooser);
 		CameraServer.getInstance().startAutomaticCapture();
 		
 		//Zero out and get the Yaw of the robot from the Gyro
 		DriveTrain.zeroYaw();
+		double Kp = 0.03;
 		
 		
 		
@@ -65,7 +68,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		switch (autoSelected) {
-		case customAuto:
+		case customAuto1:
 			if(DriveTrain.readEncoderL() < 1000) {
 				DriveTrain.move(-0.6, 0);
 			}
@@ -75,6 +78,11 @@ public class Robot extends IterativeRobot {
 			SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
 			SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
 			break;
+		case customAuto2:
+			DriveTrain.zeroYaw();  //zero encoder yaw axis
+			while (isAutonomous()) {
+				
+			}
 		case defaultAuto:
 		default:
 			// Put default auto code here
@@ -92,10 +100,10 @@ public class Robot extends IterativeRobot {
 		
 		//put the data on the smart dashboard for the encoders.
 		SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
-		SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
-		
+		SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());		
 		SmartDashboard.putBoolean("Gyro Calibrating", DriveTrain.isCalibrating());
 		SmartDashboard.putNumber("Yaw: ", DriveTrain.getYaw());
+		SmartDashboard.putNumber("Shooter Power", joyStick.getSlider());
 	}
 
 	/**
