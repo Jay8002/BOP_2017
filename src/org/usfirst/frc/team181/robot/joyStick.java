@@ -9,8 +9,8 @@ public class joyStick {
 	public static Joystick joystick = new Joystick(0);
 	public static Joystick opStick = new Joystick(1);
 	static boolean highGear = false;
-	static boolean collector_open = false;
-	static boolean servoPosition = false;
+	static boolean gear_open = false;
+	static boolean climbing = false;
 
 			
 	//create joystick buttons
@@ -31,13 +31,13 @@ public class joyStick {
 		if (joystick.getRawButton(3) == true) {
 			DriveTrain.resetEncoders();
 		}
-		if(opStick.getRawButton(2) == true && collector_open == false){
+		if(opStick.getRawButton(2) == true && gear_open == false){
 			Mechanisms.gearOpen();
-			collector_open = true;
+			gear_open = true;
 		}
-		if(opStick.getRawButton(2) == false && collector_open == true){
+		if(opStick.getRawButton(2) == false && gear_open == true){
 			Mechanisms.gearClosed();
-			collector_open = false;
+			gear_open = false;
 		}	 		 			
 		if(opStick.getRawButton(1) == true) {
 			Mechanisms.shooterOn();
@@ -45,13 +45,15 @@ public class joyStick {
 		if(opStick.getRawButton(1) == false) {
 			Mechanisms.shooterOff();
 		}
-		if(opStick.getRawButton(3) == true) {
-			
+		if(joystick.getRawButton(6) == false && climbing == false) {
 			Mechanisms.servoOpen();
+			climbing = true;
 		}
-		if(opStick.getRawButton(3) == false) {
+		if(joystick.getRawButton(6) == true && climbing == true) {
 			Mechanisms.servoClosed();
+			climbing = false;
 		}
+	
 	}
 	
 	

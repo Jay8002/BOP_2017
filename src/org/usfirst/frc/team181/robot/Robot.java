@@ -58,6 +58,10 @@ public class Robot extends IterativeRobot {
 		chooser.addObject("Gyro Auto", customAuto2);
 
 		SmartDashboard.putData("Auto choices", chooser);
+		
+		DriveTrain.lowGear();
+		Mechanisms.servoClosed();
+		
 		CameraServer.getInstance().startAutomaticCapture();
 		
 		
@@ -75,6 +79,8 @@ public class Robot extends IterativeRobot {
 		    visionThread.start();
 		*/
 		
+		    
+		    
 		//Zero out and get the Yaw of the robot from the Gyro
 		DriveTrain.zeroYaw();
 		double Kp = 0.03;
@@ -167,6 +173,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putBoolean("Gyro Calibrating", DriveTrain.isCalibrating());
 		SmartDashboard.putNumber("Yaw: ", DriveTrain.getYaw());
 		SmartDashboard.putNumber("Shooter Power", joyStick.getSlider());
+		SmartDashboard.putNumber("Servo Position", Mechanisms.getServoAngle());
 	}
 
 	
