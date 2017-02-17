@@ -29,11 +29,11 @@ public class joyStick {
 			DriveTrain.resetEncoders();
 		}
 		if(opStick.getRawButton(2) == true && collector_open == false){
-			Mechanisms.collectorOpen();
+			Mechanisms.gearOpen();
 			collector_open = true;
 		}
 		if(opStick.getRawButton(2) == false && collector_open == true){
-			Mechanisms.collectorClosed();
+			Mechanisms.gearClosed();
 			collector_open = false;
 		}	 		 			
 		if(opStick.getRawButton(1) == true) {

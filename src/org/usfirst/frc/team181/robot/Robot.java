@@ -3,10 +3,16 @@ package org.usfirst.frc.team181.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import java.io.IOException;
-
+import org.opencv.core.Rect;
+import org.opencv.imgproc.Imgproc;
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.vision.VisionPipeline;
+import edu.wpi.first.wpilibj.vision.VisionRunner;
+import edu.wpi.first.wpilibj.vision.VisionThread;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -16,6 +22,9 @@ import edu.wpi.first.wpilibj.CameraServer;
  * directory.
  */
 public class Robot extends IterativeRobot {
+	private static final int IMG_WIDTH = 320;
+	private static final int IMG_HEIGHT = 240;
+	
 	final String defaultAuto = "Default";
 
 	final String customAuto = "My Auto";
@@ -23,7 +32,13 @@ public class Robot extends IterativeRobot {
 
 	final String customAuto1 = "Encoder Auto";
 	final String customAuto2 = "Gyro Auto";
-
+	final String gear = "gear";
+	
+	private VisionThread visionThread;
+	private double centerX = 0.0;
+	
+	private final Object imgLock = new Object();
+	
 	String autoSelected;
 	SendableChooser<String> chooser = new SendableChooser<>();
 	
@@ -37,12 +52,28 @@ public class Robot extends IterativeRobot {
 
 		chooser.addObject("My Auto", customAuto);
 		chooser.addObject("Turning", autoTurning);
-
+		chooser.addObject("gear", gear);
+		
 		chooser.addObject("Encoder Auto", customAuto1);
 		chooser.addObject("Gyro Auto", customAuto2);
 
 		SmartDashboard.putData("Auto choices", chooser);
 		CameraServer.getInstance().startAutomaticCapture();
+		
+		
+		   UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+		    camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
+		    
+		    /*visionThread = new VisionThread(camera, new Pipeline(), pipeline -> {
+		        if (!pipeline.filterContoursOutput().isEmpty()) {
+		            Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+		            synchronized (imgLock) {
+		                centerX = r.x + (r.width / 2);
+		            }
+		        }
+		    });
+		    visionThread.start();
+		*/
 		
 		//Zero out and get the Yaw of the robot from the Gyro
 		DriveTrain.zeroYaw();
@@ -92,8 +123,8 @@ public class Robot extends IterativeRobot {
 			break;
 
 		case autoTurning:
-			//DriveTrain.move(DriveTrain.toClicks(35));
-			DriveTrain.turn(90);
+			DriveTrain.move(DriveTrain.toClicks(35));
+			//DriveTrain.turn(90);
 			
 
 		case customAuto2:
@@ -102,7 +133,20 @@ public class Robot extends IterativeRobot {
 				
 			}
 		case defaultAuto:
-
+			
+		case gear:
+			
+			//drive forward
+			DriveTrain.move(DriveTrain.toClicks(48));
+			//locate peg
+			
+			//release gear
+				Mechanisms.gearOpen();
+			//back up
+				DriveTrain.move(DriveTrain.toClicks(48));
+			//Prepare to shoot
+				
+			
 		default:
 			// Put default auto code here
 			break;
