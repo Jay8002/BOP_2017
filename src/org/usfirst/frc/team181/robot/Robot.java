@@ -60,7 +60,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Auto choices", chooser);
 		
 		DriveTrain.lowGear();
-		//Mechanisms.servoClosed();
+		Mechanisms.servoClosed();
 		
 		CameraServer.getInstance().startAutomaticCapture();
 		

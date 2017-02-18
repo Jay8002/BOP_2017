@@ -13,10 +13,10 @@ public class Mechanisms{
 	static Servo climberServo = new Servo(7);
 	
 	public static void servoOpen(){
-		climberServo.setAngle(50);
+		climberServo.setAngle(22);
 	}
 	public static void servoClosed(){
-		climberServo.setAngle(22);
+		climberServo.setAngle(50);
 	}
 	public static void gearOpen (){
 		gearSolenoid.set(DoubleSolenoid.Value.kForward);

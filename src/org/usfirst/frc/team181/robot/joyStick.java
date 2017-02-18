@@ -49,7 +49,7 @@ public class joyStick {
 		
 		System.out.println("button state"+joystick.getRawButton(7));
 		
-		if (joystick.getRawButton(7) == true && climbing == false && processing == false){ 
+		if (joystick.getRawButton(8) == true && climbing == false && processing == false){ 
 			processing = true;
 			Mechanisms.servoClosed();
 			climbing = true;
