@@ -11,6 +11,7 @@ public class Mechanisms{
 	static DoubleSolenoid gearSolenoid = new DoubleSolenoid(0,2,3);
 	static boolean gear_closed = true;
 	static Servo climberServo = new Servo(7);
+	static VictorSP fuelAgitator = new VictorSP(3);
 	
 	public static void servoOpen(){
 		climberServo.setAngle(22);
@@ -33,5 +34,11 @@ public class Mechanisms{
 	}
 	public static double getServoAngle(){
 		return climberServo.getAngle();
+	}
+	public static void agitateFuel(){
+		fuelAgitator.set(0.5);
+	}
+	public static void unagitateFuel(){
+		fuelAgitator.set(0);
 	}
 }

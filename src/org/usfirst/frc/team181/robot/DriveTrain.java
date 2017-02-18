@@ -80,7 +80,7 @@ public class DriveTrain {
 	
 	
 	public static double toClicks(int inches){
-		return (inches * 19.04761905);
+		return (inches * 21.714285717);
 	}
 	public static void highGear() {
 		doubleSolenoid.set(DoubleSolenoid.Value.kForward);
