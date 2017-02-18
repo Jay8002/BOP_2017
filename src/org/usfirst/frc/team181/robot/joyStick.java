@@ -11,7 +11,8 @@ public class joyStick {
 	static boolean highGear = false;
 	static boolean gear_open = false;
 	static boolean climbing = false;
-
+	static boolean processing = false;
+	static JoystickButton seven = new JoystickButton(joystick, 7);
 			
 	//create joystick buttons
 	JoystickButton gearButton = new JoystickButton(joystick, 1);
@@ -45,13 +46,20 @@ public class joyStick {
 		if(opStick.getRawButton(1) == false) {
 			Mechanisms.shooterOff();
 		}
-		if(joystick.getRawButton(6) == false && climbing == false) {
-			Mechanisms.servoOpen();
-			climbing = true;
-		}
-		if(joystick.getRawButton(6) == true && climbing == true) {
+		
+		System.out.println("button state"+joystick.getRawButton(7));
+		
+		if (joystick.getRawButton(7) == true && climbing == false && processing == false){ 
+			processing = true;
 			Mechanisms.servoClosed();
+			climbing = true;
+			processing = false;
+		}
+		else if(joystick.getRawButton(7) == true && climbing == true && processing == false){
+			processing = true;
+			Mechanisms.servoOpen();
 			climbing = false;
+			processing = false;
 		}
 	
 	}

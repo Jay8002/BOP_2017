@@ -60,7 +60,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Auto choices", chooser);
 		
 		DriveTrain.lowGear();
-		Mechanisms.servoClosed();
+		//Mechanisms.servoClosed();
 		
 		CameraServer.getInstance().startAutomaticCapture();
 		
@@ -157,6 +157,10 @@ public class Robot extends IterativeRobot {
 			// Put default auto code here
 			break;
 		}
+	}
+	
+	public void teleopInit(){
+		Mechanisms.servoClosed();
 	}
 
 	/**

@@ -10,7 +10,7 @@ public class Mechanisms{
 	//create DoubleSolenoids for gear collector
 	static DoubleSolenoid gearSolenoid = new DoubleSolenoid(0,2,3);
 	static boolean gear_closed = true;
-	static Servo climberServo = new Servo(4);
+	static Servo climberServo = new Servo(7);
 	
 	public static void servoOpen(){
 		climberServo.setAngle(50);
