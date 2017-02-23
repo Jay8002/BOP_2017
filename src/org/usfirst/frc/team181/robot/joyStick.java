@@ -68,6 +68,9 @@ public class joyStick {
 		if(opStick.getRawButton(8) == true){
 			Mechanisms.unagitateFuel();
 		}
+		if(opStick.getRawButton(9) == true){
+			Mechanisms.reverseAgitate();
+		}
 	}
 	
 	

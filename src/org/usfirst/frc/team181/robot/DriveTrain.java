@@ -41,27 +41,26 @@ public class DriveTrain {
 	}
 	
 	public static void move (double y, double z){ 		
-			robotDrive.arcadeDrive(-y, -z + 0.1);	
+			robotDrive.arcadeDrive(-y, -z);	
 	}
 
-	public static void move (int clicks){
-		if (DriveTrain.readEncoderL() <= clicks && DriveTrain.readEncoderR() <= clicks){
-			DriveTrain.move(-0.6, -0.1);
-		}
+	public static void move (){
+		// (DriveTrain.readEncoderL() <= clicks && DriveTrain.readEncoderR() <= clicks){
+			DriveTrain.move(-0.7, 0);
+		//}
 	}
 	
 	public static void move (double inches){
-		if (DriveTrain.readEncoderL() <= inches && DriveTrain.readEncoderR() <= inches){
-			DriveTrain.move(-0.6, -0.1);
-		}
+		DriveTrain.move(-0.6, -0.1);
 	}
 	
 	public static void joyMove() {
-		robotDrive.arcadeDrive(-joyStick.getY(), -joyStick.getZ() + -0.1);
+		robotDrive.arcadeDrive(-joyStick.getY(), -joyStick.getZ());
 	}
 	
 	public static void turn(int angle){
 		//Zero out and get the Yaw of the robot from the Gyro
+		/*
 		for (double i = getYaw();  i >= angle+5 || i <= angle-5 ; i = getYaw()){
 			if (i < angle){
 				move(0, .8);
@@ -72,6 +71,7 @@ public class DriveTrain {
 				stop();
 			}
 		}
+		*/
 	}
 	
 	public static void stop() {
@@ -79,8 +79,8 @@ public class DriveTrain {
 	}
 	
 	
-	public static double toClicks(int inches){
-		return (inches * 21.714285717);
+	public static double toInches(int clicks){
+		return (clicks * 0.0552);
 	}
 	public static void highGear() {
 		doubleSolenoid.set(DoubleSolenoid.Value.kForward);

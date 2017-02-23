@@ -10,8 +10,8 @@ public class Mechanisms{
 	//create DoubleSolenoids for gear collector
 	static DoubleSolenoid gearSolenoid = new DoubleSolenoid(0,2,3);
 	static boolean gear_closed = true;
-	static Servo climberServo = new Servo(7);
-	static VictorSP fuelAgitator = new VictorSP(3);
+	static Servo climberServo = new Servo(3);
+	static VictorSP fuelAgitator = new VictorSP(7);
 	
 	public static void servoOpen(){
 		climberServo.setAngle(22);
@@ -27,7 +27,7 @@ public class Mechanisms{
 		gearSolenoid.set(DoubleSolenoid.Value.kReverse);
 	}
 	public static void shooterOn() {
-		shooterMotor.set(joyStick.getSlider());
+		shooterMotor.set(convertThrottle());
 	}
 	public static void shooterOff() {
 		shooterMotor.set(0);
@@ -36,9 +36,15 @@ public class Mechanisms{
 		return climberServo.getAngle();
 	}
 	public static void agitateFuel(){
-		fuelAgitator.set(0.5);
+		fuelAgitator.set(1);
 	}
 	public static void unagitateFuel(){
 		fuelAgitator.set(0);
+	}
+	public static void reverseAgitate(){
+		fuelAgitator.set(-1);
+	}
+	public static double convertThrottle(){
+		return .8*(1-(joyStick.getSlider()+1)/2)+1*((joyStick.getSlider()+1)/2);
 	}
 }
