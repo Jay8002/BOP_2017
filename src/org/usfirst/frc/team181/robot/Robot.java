@@ -47,6 +47,17 @@ public class Robot extends IterativeRobot {
 	
 	double goalDistance = 0;
 	double totalDistance = 0;
+	
+	
+	//for center gear
+	boolean center_forward1 = false;
+	boolean center_wait1 = false;
+	boolean center_openGear1 = false;
+	boolean center_wait2 = false;
+	boolean center_backUp1 = false;
+	boolean center_closeGear1 = false;
+	boolean center_turn45 = false;
+	boolean center_forward2 = false;
 
 
 	String autoSelected;
@@ -120,6 +131,8 @@ public class Robot extends IterativeRobot {
 		DriveTrain.resetEncoders();
 		//Zero out and get the Yaw of the robot from the Gyro
 		DriveTrain.zeroYaw();
+		
+
 	}
 
 	/**
@@ -130,20 +143,21 @@ public class Robot extends IterativeRobot {
 		
 
 		switch (autoSelected) {
-		
-		case lineOnly:
-			if(centerX > IMG_WIDTH/2){
-				
-			}
-			double centerX;
-			synchronized(imgLock){
-				centerX = this.centerX;
-			}
-			double turn = centerX - (IMG_WIDTH / 2 );
-			DriveTrain.move(-0.6, turn * 0.005);
-			
+
 		case centerTarget:
 			
+			if(center_forward1 == false){
+				
+				DriveTrain.move(.5,.5);
+				if(DriveTrain.readEncoderL() >= 60 && DriveTrain.readEncoderR() >= 60){
+					center_forward1 = true;
+					DriveTrain.resetEncoders();
+					
+					
+				}
+				
+			}
+			break;
 	/*
 		case customAuto1:
 			if(DriveTrain.readEncoderL() < 1000) {
@@ -165,104 +179,19 @@ public class Robot extends IterativeRobot {
 		case doNothing:
 			DriveTrain.stop();
 			break;
-		case gearCenter:
+		case lineOnly:
 				
 			//drive forward
-			if (DriveTrain.readEncoderL() < 5 && DriveTrain.readEncoderR() < 5){
-				DriveTrain.move();
+			if (DriveTrain.readEncoderL() < 60 && DriveTrain.readEncoderR() < 60){
+				DriveTrain.move(-.5, 0);
 				SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
 				SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
 				
 			}
 			  if (DriveTrain.readEncoderL() >= 5 && DriveTrain.readEncoderR() >= 5){
-			  	DriveTrain.stop();
+			  	//DriveTrain.stop();
 			  }
 			  break;
-			  /*
-
-			//release gear
-				Mechanisms.gearOpen();
-							
-				if (DriveTrain.readEncoderL() < -12 && DriveTrain.readEncoderR() < -12){
-					DriveTrain.move();
-					
-				}
-				if (DriveTrain.readEncoderL() >= 75 && DriveTrain.readEncoderR() >= 75){
-					DriveTrain.turn(90);	
-					if (DriveTrain.readEncoderL() < -36 && DriveTrain.readEncoderR() < -36){
-						DriveTrain.move();
-					}
-					if (DriveTrain.readEncoderL() >= -36 && DriveTrain.readEncoderR() >= -36){
-						DriveTrain.turn(-90);
-						
-						if (DriveTrain.readEncoderL() < -36 && DriveTrain.readEncoderR() < -36){
-							
-							DriveTrain.move();	
-						}	
-							
-						if (DriveTrain.readEncoderL() >= -36 && DriveTrain.readEncoderR() >= -36){
-							
-						}
-					}
-					
-				}
-			  }
-			//Prepare to shoot
-			  
-			  break;
-			  */
-		case gearRight:
-			
-			if (DriveTrain.readEncoderL() < 75 && DriveTrain.readEncoderR() < 75){
-				DriveTrain.resetEncoders();
-				DriveTrain.move();
-			}
-			if (DriveTrain.readEncoderL() >= 75 && DriveTrain.readEncoderR() >= 75){
-				//turn left
-				DriveTrain.turn(-25);
-				
-				if (DriveTrain.readEncoderL() < 8 && DriveTrain.readEncoderR() < 8){
-					DriveTrain.resetEncoders();
-					DriveTrain.move();
-				}
-				if (DriveTrain.readEncoderL() >= 8 && DriveTrain.readEncoderR() >= 8){
-					Mechanisms.gearOpen();					
-				
-					if (DriveTrain.readEncoderL() < -10 && DriveTrain.readEncoderR() < 8){
-						DriveTrain.resetEncoders();
-						DriveTrain.move();
-					}
-				}
-				}
-			
-			//backup
-			DriveTrain.move(-10);
-			
-			//turn back
-			DriveTrain.turn(25);
-			
-			break;
-		case gearLeft:
-			//go foward
-			DriveTrain.move(75);
-			
-			//turn
-			DriveTrain.turn(25);
-			
-			
-			//forward to place gear
-			DriveTrain.move(8);
-			
-			//open gear
-			Mechanisms.gearOpen();
-			
-			//back up
-			DriveTrain.move(-10);
-			
-			//turn back
-			DriveTrain.turn(-25);
-			
-			break;
 			
 		default:
 			// Put default auto code here

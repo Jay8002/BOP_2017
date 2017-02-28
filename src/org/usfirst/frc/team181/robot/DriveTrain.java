@@ -34,17 +34,17 @@ public class DriveTrain {
         robotDrive.setMaxOutput(1.0);
         robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
         //set parameters for left encoder
-        leftEncoder.setDistancePerPulse(1);
+        leftEncoder.setDistancePerPulse(.0430);
         //set parameters for right encoder
-        rightEncoder.setDistancePerPulse(1);
+        rightEncoder.setDistancePerPulse(.0430);
         
 	}
 	
 	public static void move (double y, double z){ 		
-			robotDrive.arcadeDrive(-y, -z);	
+			robotDrive.arcadeDrive(y, z);	
 	}
 
-	public static void move (){
+	/*public static void move (){
 		// (DriveTrain.readEncoderL() <= clicks && DriveTrain.readEncoderR() <= clicks){
 			DriveTrain.move(-0.7, 0);
 		//}
@@ -53,9 +53,9 @@ public class DriveTrain {
 	public static void move (double inches){
 		DriveTrain.move(-0.6, -0.1);
 	}
-	
+	*/
 	public static void joyMove() {
-		robotDrive.arcadeDrive(-joyStick.getY(), -joyStick.getZ());
+		robotDrive.arcadeDrive(joyStick.getY(), -joyStick.getZ());
 	}
 	
 	public static void turn(int angle){
