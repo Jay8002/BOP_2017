@@ -32,26 +32,22 @@ public class DriveTrain {
         robotDrive.setExpiration(0.1);
         robotDrive.setSensitivity(0.5);
         robotDrive.setMaxOutput(1.0);
-        robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+       // robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
         //set parameters for left encoder
-        leftEncoder.setDistancePerPulse(.0430);
+        leftEncoder.setDistancePerPulse(0.05);
         //set parameters for right encoder
-        rightEncoder.setDistancePerPulse(.0430);
+        rightEncoder.setDistancePerPulse(0.05);
         
 	}
 	
 	public static void move (double y, double z){ 		
-			robotDrive.arcadeDrive(y, z);	
+			robotDrive.arcadeDrive(-y, z);	
 	}
 
 	/*public static void move (){
 		// (DriveTrain.readEncoderL() <= clicks && DriveTrain.readEncoderR() <= clicks){
 			DriveTrain.move(-0.7, 0);
 		//}
-	}
-	
-	public static void move (double inches){
-		DriveTrain.move(-0.6, -0.1);
 	}
 	*/
 	public static void joyMove() {

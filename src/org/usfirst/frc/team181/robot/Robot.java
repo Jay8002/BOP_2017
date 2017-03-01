@@ -10,6 +10,8 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.internal.HardwareTimer;
 import edu.wpi.first.wpilibj.vision.VisionRunner;
 import edu.wpi.first.wpilibj.vision.VisionThread;
 
@@ -73,9 +75,9 @@ public class Robot extends IterativeRobot {
 		chooser.addObject("Center Gear", gearCenter);
 		chooser.addObject("Right Gear", gearRight);
 		chooser.addObject("Left Gear", gearLeft);
-		chooser.addObject("Center to Target", centerTarget);
 		chooser.addObject("lineOnly", lineOnly);
 		SmartDashboard.putData("Auto choices", chooser);
+		DriveTrain.setup();
 		
 		DriveTrain.lowGear();
 		Mechanisms.servoClosed();
@@ -131,7 +133,7 @@ public class Robot extends IterativeRobot {
 		DriveTrain.resetEncoders();
 		//Zero out and get the Yaw of the robot from the Gyro
 		DriveTrain.zeroYaw();
-		
+		DriveTrain.setup();
 
 	}
 
@@ -144,18 +146,37 @@ public class Robot extends IterativeRobot {
 
 		switch (autoSelected) {
 
-		case centerTarget:
+		case gearCenter:
 			
 			if(center_forward1 == false){
 				
-				DriveTrain.move(.5,.5);
+				DriveTrain.move(.6, 0);
+				outputEncoders();
+				
 				if(DriveTrain.readEncoderL() >= 60 && DriveTrain.readEncoderR() >= 60){
 					center_forward1 = true;
+					DriveTrain.stop();
 					DriveTrain.resetEncoders();
-					
-					
 				}
-				
+			}
+					
+				else if (center_wait1 == false){
+						
+						Timer.delay(.5);
+						Mechanisms.gearOpen();
+						Timer.delay(.7);
+						center_wait1 = true;
+				}
+						
+				else if(center_backUp1 == false){
+						DriveTrain.move(-.6, 0);
+						outputEncoders();
+						if(DriveTrain.readEncoderL() <= -15 && DriveTrain.readEncoderR() <= -15){
+							center_backUp1 = true;
+							DriveTrain.stop();
+							Mechanisms.gearClosed();
+							DriveTrain.resetEncoders();
+						}							
 			}
 			break;
 	/*
@@ -182,14 +203,14 @@ public class Robot extends IterativeRobot {
 		case lineOnly:
 				
 			//drive forward
-			if (DriveTrain.readEncoderL() < 60 && DriveTrain.readEncoderR() < 60){
-				DriveTrain.move(-.5, 0);
+			if (DriveTrain.readEncoderL() < 93 && DriveTrain.readEncoderR() < 93){
+				DriveTrain.move(.7, 0);
 				SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
 				SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
 				
 			}
-			  if (DriveTrain.readEncoderL() >= 5 && DriveTrain.readEncoderR() >= 5){
-			  	//DriveTrain.stop();
+			else if (DriveTrain.readEncoderL() >= 93 && DriveTrain.readEncoderR() >= 93){
+			  	DriveTrain.stop();
 			  }
 			  break;
 			
@@ -202,6 +223,7 @@ public class Robot extends IterativeRobot {
 	
 	
 	public void teleopInit(){
+		DriveTrain.setup();
 		Mechanisms.servoClosed();
 	}
 
@@ -254,6 +276,11 @@ public class Robot extends IterativeRobot {
 			System.out.println("ERROR Reading From Arduino!");
 		}
 		*/
+	}
+	
+	public void outputEncoders(){
+		SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
+		SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
 	}
 }
 

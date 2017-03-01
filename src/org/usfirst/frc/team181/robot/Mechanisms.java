@@ -10,14 +10,14 @@ public class Mechanisms{
 	//create DoubleSolenoids for gear collector
 	static DoubleSolenoid gearSolenoid = new DoubleSolenoid(0,2,3);
 	static boolean gear_closed = true;
-	static Servo climberServo = new Servo(3);
-	static VictorSP fuelAgitator = new VictorSP(7);
+	static Servo climberServo = new Servo(7);
+	static VictorSP fuelAgitator = new VictorSP(3);
 	
-	public static void servoOpen(){
-		climberServo.setAngle(22);
-	}
 	public static void servoClosed(){
-		climberServo.setAngle(50);
+		climberServo.setAngle(90);
+	}
+	public static void servoOpen(){
+		climberServo.setAngle(38);
 	}
 	public static void gearOpen (){
 		gearSolenoid.set(DoubleSolenoid.Value.kForward);
