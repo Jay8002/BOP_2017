@@ -56,18 +56,18 @@ public class DriveTrain {
 	
 	public static void turn(int angle){
 		//Zero out and get the Yaw of the robot from the Gyro
-		/*
 		for (double i = getYaw();  i >= angle+5 || i <= angle-5 ; i = getYaw()){
+			
 			if (i < angle){
-				move(0, .8);
+				move(0, -.5);
 				stop();
 			}
 			if (i > angle){
-				move(0, -.8);
+				move(0, .5);
 				stop();
 			}
 		}
-		*/
+		
 	}
 	
 	public static void stop() {

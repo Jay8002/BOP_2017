@@ -54,13 +54,13 @@ public class Robot extends IterativeRobot {
 	//for center gear
 	boolean center_forward1 = false;
 	boolean center_wait1 = false;
-	boolean center_openGear1 = false;
-	boolean center_wait2 = false;
 	boolean center_backUp1 = false;
-	boolean center_closeGear1 = false;
-	boolean center_turn45 = false;
-	boolean center_forward2 = false;
-
+	
+	//for right gear
+	boolean right_forward1 = false;
+	boolean right_wait1 = false;
+	boolean right_backUp1 = false;
+	boolean right_forward2 = false;
 
 	String autoSelected;
 	SendableChooser<String> chooser = new SendableChooser<>();
@@ -134,6 +134,7 @@ public class Robot extends IterativeRobot {
 		//Zero out and get the Yaw of the robot from the Gyro
 		DriveTrain.zeroYaw();
 		DriveTrain.setup();
+		Mechanisms.gearClosed();
 
 	}
 
@@ -151,7 +152,7 @@ public class Robot extends IterativeRobot {
 			if(center_forward1 == false){
 				
 				DriveTrain.move(.6, 0);
-				outputEncoders();
+				outputSensors();
 				
 				if(DriveTrain.readEncoderL() >= 60 && DriveTrain.readEncoderR() >= 60){
 					center_forward1 = true;
@@ -164,13 +165,13 @@ public class Robot extends IterativeRobot {
 						
 						Timer.delay(.5);
 						Mechanisms.gearOpen();
-						Timer.delay(.7);
+						Timer.delay(1);
 						center_wait1 = true;
 				}
 						
 				else if(center_backUp1 == false){
-						DriveTrain.move(-.6, 0);
-						outputEncoders();
+						DriveTrain.move(-.5, 0);
+						outputSensors();
 						if(DriveTrain.readEncoderL() <= -15 && DriveTrain.readEncoderR() <= -15){
 							center_backUp1 = true;
 							DriveTrain.stop();
@@ -179,27 +180,62 @@ public class Robot extends IterativeRobot {
 						}							
 			}
 			break;
-	/*
-		case customAuto1:
-			if(DriveTrain.readEncoderL() < 1000) {
-				DriveTrain.move(-0.6, 0);
+			
+			
+		case gearRight:
+			
+				outputSensors();
+				if(right_forward1 == false){
+				
+					DriveTrain.move(.6, 0);
+					outputSensors();
+					
+					if(DriveTrain.readEncoderL() >= 60 && DriveTrain.readEncoderR() >= 60){
+						right_forward1 = true;
+						DriveTrain.stop();
+						DriveTrain.resetEncoders();
+					}
 			}
-			else if(DriveTrain.readEncoderL() > 1000) {
-				DriveTrain.stop();
-			}
-			SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
-			SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
-			SmartDashboard.putNumber("Throttle value", Mechanisms.convertThrottle());
+					
+				else if (right_wait1 == false){
+						
+						Timer.delay(.5);
+						Mechanisms.gearOpen();
+						Timer.delay(1);
+						right_wait1 = true;
+				}
+						
+				else if(right_backUp1 == false){
+						DriveTrain.move(-.5, 0);
+						outputSensors();
+						if(DriveTrain.readEncoderL() <= -15 && DriveTrain.readEncoderR() <= -15){
+							DriveTrain.stop();
+							Mechanisms.gearClosed();
+							DriveTrain.turn(50);
+							Timer.delay(.5);
+							DriveTrain.resetEncoders();
+							right_backUp1 = true;
+						}							
+				}
+				
+				else if(right_forward2 == false){
+					DriveTrain.move(1, 0);
+					outputSensors();
+					if(DriveTrain.readEncoderL() < 90 && DriveTrain.readEncoderR() < 90){
+						DriveTrain.stop();
+						DriveTrain.resetEncoders();
+						right_forward2 = true;
+					}
+					
+				}
 			break;
-
-		case autoTurning:
-			DriveTrain.move(DriveTrain.toClicks(35));
-			//DriveTrain.turn(90);
-	*/
-		 
+			
+			
 		case doNothing:
 			DriveTrain.stop();
 			break;
+			
+			
 		case lineOnly:
 				
 			//drive forward
@@ -223,6 +259,7 @@ public class Robot extends IterativeRobot {
 	
 	
 	public void teleopInit(){
+		DriveTrain.zeroYaw();
 		DriveTrain.setup();
 		Mechanisms.servoClosed();
 	}
@@ -278,9 +315,10 @@ public class Robot extends IterativeRobot {
 		*/
 	}
 	
-	public void outputEncoders(){
+	public void outputSensors(){
 		SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
 		SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
+		SmartDashboard.putNumber("Yaw: ", DriveTrain.getYaw());
 	}
 }
 
