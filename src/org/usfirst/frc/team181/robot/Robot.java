@@ -28,7 +28,8 @@ public class Robot extends IterativeRobot {
 
 	final String customAuto = "My Auto";
 	final String autoTurning = "Turning";
-
+	final String center_lineRight = "Right Line and Gear";
+	final String center_lineLeft = "Left Line and Gear";
 	final String customAuto1 = "Encoder Auto";
 	final String customAuto2 = "Gyro Auto";
 	final String gearCenter = "gear Center";
@@ -56,12 +57,33 @@ public class Robot extends IterativeRobot {
 	boolean center_wait1 = false;
 	boolean center_backUp1 = false;
 	
+	//for center gear and right line 
+	boolean center_rightForward1 = false;
+	boolean center_rightWait1 = false;
+	boolean center_rightBackUp1 = false;
+	boolean center_rightForward2 = false;
+	
+	//for center gear and left Line
+	
+	boolean center_leftForward1 = false;
+	boolean center_leftWait1 = false;
+	boolean center_leftBackUp1 = false;
+	boolean center_leftForward2 = false;
+	
+	
+	//for left gear
+	boolean left_forward1 = false;
+	boolean left_forward2 = false;
+	boolean left_forward3 = false;
+	boolean left_backwards1 = false;
+	
+
 	//for right gear
 	boolean right_forward1 = false;
-	boolean right_wait1 = false;
-	boolean right_backUp1 = false;
 	boolean right_forward2 = false;
-
+	boolean right_forward3 = false;
+	boolean right_backwards1 = false;
+	
 	String autoSelected;
 	SendableChooser<String> chooser = new SendableChooser<>();
 	
@@ -75,7 +97,10 @@ public class Robot extends IterativeRobot {
 		chooser.addObject("Center Gear", gearCenter);
 		chooser.addObject("Right Gear", gearRight);
 		chooser.addObject("Left Gear", gearLeft);
+		chooser.addObject("Left Line and Gear From Center Lane", center_lineLeft);
 		chooser.addObject("lineOnly", lineOnly);
+		chooser.addObject("Right Line and Gear From Center Lane", center_lineRight);
+		
 		SmartDashboard.putData("Auto choices", chooser);
 		DriveTrain.setup();
 		
@@ -182,54 +207,206 @@ public class Robot extends IterativeRobot {
 			break;
 			
 			
-		case gearRight:
+		case center_lineRight:
 			
 				outputSensors();
-				if(right_forward1 == false){
+				if(center_rightForward1 == false){
 				
 					DriveTrain.move(.6, 0);
 					outputSensors();
 					
 					if(DriveTrain.readEncoderL() >= 60 && DriveTrain.readEncoderR() >= 60){
-						right_forward1 = true;
+						center_rightForward1 = true;
 						DriveTrain.stop();
 						DriveTrain.resetEncoders();
 					}
 			}
 					
-				else if (right_wait1 == false){
+				else if (center_rightWait1 == false){
 						
 						Timer.delay(.5);
 						Mechanisms.gearOpen();
 						Timer.delay(1);
-						right_wait1 = true;
+						center_rightWait1 = true;
 				}
 						
-				else if(right_backUp1 == false){
+				else if(center_rightBackUp1 == false){
 						DriveTrain.move(-.5, 0);
 						outputSensors();
 						if(DriveTrain.readEncoderL() <= -15 && DriveTrain.readEncoderR() <= -15){
-							DriveTrain.stop();
+							 DriveTrain.stop();
 							Mechanisms.gearClosed();
 							DriveTrain.turn(50);
 							Timer.delay(.5);
 							DriveTrain.resetEncoders();
-							right_backUp1 = true;
+							center_rightBackUp1 = true;
 						}							
 				}
 				
-				else if(right_forward2 == false){
+				else if(center_rightForward2 == false){
 					DriveTrain.move(1, 0);
 					outputSensors();
 					if(DriveTrain.readEncoderL() < 90 && DriveTrain.readEncoderR() < 90){
 						DriveTrain.stop();
 						DriveTrain.resetEncoders();
-						right_forward2 = true;
+						center_rightForward2 = true;
 					}
 					
 				}
 			break;
 			
+		case center_lineLeft:
+			
+			outputSensors();
+			if(center_leftForward1 == false){
+			
+				DriveTrain.move(.6, 0);
+				outputSensors();
+				
+				if(DriveTrain.readEncoderL() >= 60 && DriveTrain.readEncoderR() >= 60){
+					center_leftForward1  = true;
+					DriveTrain.stop();
+					DriveTrain.resetEncoders();
+				}
+		}
+				
+			else if (center_leftWait1 == false){
+					
+					Timer.delay(.5);
+					Mechanisms.gearOpen();
+					Timer.delay(1);
+					center_leftWait1 = true;
+			}
+					
+			else if(center_leftBackUp1 == false){
+					DriveTrain.move(-.5, 0);
+					outputSensors();
+					if(DriveTrain.readEncoderL() <= -15 && DriveTrain.readEncoderR() <= -15){
+						 DriveTrain.stop();
+						Mechanisms.gearClosed();
+						DriveTrain.turn(-50);
+						Timer.delay(.5);
+						DriveTrain.resetEncoders();
+						center_leftBackUp1 = true;
+					}							
+			}
+			
+			else if(center_leftForward2 == false){
+				DriveTrain.move(1, 0);
+				outputSensors();
+				if(DriveTrain.readEncoderL() < 90 && DriveTrain.readEncoderR() < 90){
+					DriveTrain.stop();
+					DriveTrain.resetEncoders();
+					center_leftForward2 = true;
+				}
+				
+			}
+		break;
+		
+		
+		case gearLeft:
+			
+			if(left_forward1 == false){
+				outputSensors();
+				DriveTrain.move(.6, 0);
+				
+				if(DriveTrain.readEncoderL() < 30 && DriveTrain.readEncoderR() < 30){
+					DriveTrain.stop();					
+					DriveTrain.turn(-45);
+					DriveTrain.resetEncoders();
+					left_forward1 = true;
+				}
+			}
+			else if (left_forward2 == false){
+				outputSensors();
+				DriveTrain.move(.5, 0);
+				
+				if(DriveTrain.readEncoderL() < 15 && DriveTrain.readEncoderR() < 15){
+					DriveTrain.stop();
+					DriveTrain.turn(45);
+					DriveTrain.resetEncoders();
+					left_forward2 = true;
+				}
+			}
+			
+			else if (left_forward3 == false){
+				outputSensors();
+				DriveTrain.move(.6, 0);
+				
+				if(DriveTrain.readEncoderL() < 15 && DriveTrain.readEncoderR() < 15){
+					DriveTrain.stop();
+					Timer.delay(.5);
+					Mechanisms.gearOpen();
+					Timer.delay(1);
+					DriveTrain.resetEncoders();
+					left_forward3 = true;
+				}
+			}
+			
+			else if (left_backwards1 == false){
+				outputSensors();
+				DriveTrain.move(-.5, 0);
+				
+				if(DriveTrain.readEncoderL() < -15 && DriveTrain.readEncoderR() < -15){
+					Mechanisms.gearClosed();
+					DriveTrain.resetEncoders();
+					left_backwards1 = true;
+				}
+				
+			}
+			break;
+			
+		case gearRight:
+			
+			if(right_forward1 == false){
+				outputSensors();
+				DriveTrain.move(.6, 0);
+				
+				if(DriveTrain.readEncoderL() < 30 && DriveTrain.readEncoderR() < 30){
+					DriveTrain.stop();					
+					DriveTrain.turn(45);
+					DriveTrain.resetEncoders();
+					right_forward1 = true;
+				}
+			}
+			else if (right_forward2 == false){
+				outputSensors();
+				DriveTrain.move(.5, 0);
+				
+				if(DriveTrain.readEncoderL() < 15 && DriveTrain.readEncoderR() < 15){
+					DriveTrain.stop();
+					DriveTrain.turn(-45);
+					DriveTrain.resetEncoders();
+					right_forward2 = true;
+				}
+			}
+			
+			else if (right_forward3 == false){
+				outputSensors();
+				DriveTrain.move(.6, 0);
+				
+				if(DriveTrain.readEncoderL() < 15 && DriveTrain.readEncoderR() < 15){
+					DriveTrain.stop();
+					Timer.delay(.5);
+					Mechanisms.gearOpen();
+					Timer.delay(1);
+					DriveTrain.resetEncoders();
+					right_forward3 = true;
+				}
+			}
+			
+			else if (right_backwards1 == false){
+				outputSensors();
+				DriveTrain.move(-.5, 0);
+				
+				if(DriveTrain.readEncoderL() < -15 && DriveTrain.readEncoderR() < -15){
+					Mechanisms.gearClosed();
+					DriveTrain.resetEncoders();
+					right_backwards1 = true;
+				}
+				
+			}
+			break;
 			
 		case doNothing:
 			DriveTrain.stop();
