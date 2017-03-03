@@ -66,7 +66,9 @@ public class DriveTrain {
 				move(0, .5);
 				stop();
 			}
+			
 		}
+		System.out.println("Stopped turning");
 		
 	}
 	
