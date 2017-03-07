@@ -61,10 +61,9 @@ public class joyStick {
 			climbing = false;
 			processing = false;
 		}
-		
 		if(opStick.getRawButton(7) == true){
 			Mechanisms.agitateFuel();
-	}
+		}
 		if(opStick.getRawButton(8) == true){
 			Mechanisms.unagitateFuel();
 		}

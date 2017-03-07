@@ -8,6 +8,7 @@ import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
@@ -37,9 +38,12 @@ public class Robot extends IterativeRobot {
 	final String gearLeft = "Left Gear";
 	final String centerTarget = "CenterTarget";
 	final String lineOnly = "lineOnly";
+	final String diagonalLine = "diagonalLine";
 	
-	private static final int IMG_WIDTH = 640;
-	private static final int IMG_HEIGHT = 480;
+	private Camera1 cam;
+	//private Camera2 cam2;
+	public static final int IMG_WIDTH = 640;
+	public static final int IMG_HEIGHT = 480;
 	
 	private VisionThread visionThread;
 	private double centerX = 0.0;
@@ -56,6 +60,11 @@ public class Robot extends IterativeRobot {
 	boolean center_forward1 = false;
 	boolean center_wait1 = false;
 	boolean center_backUp1 = false;
+	
+	//for diagonal gear
+	boolean diagonal_forward1 = false;
+	boolean diagonal_wait1 = false;
+	boolean diagonal_backUp1 = false;
 	
 	//for center gear and right line 
 	boolean center_rightForward1 = false;
@@ -100,32 +109,36 @@ public class Robot extends IterativeRobot {
 		chooser.addObject("<-- Center Gear Left", center_lineLeft);
 		chooser.addObject("line Only", lineOnly);
 		chooser.addObject("Center Gear Right -->", center_lineRight);
-		
+		chooser.addObject("diagonal Line",  diagonalLine);
 		SmartDashboard.putData("Auto choices", chooser);
 		DriveTrain.setup();
 		
 		DriveTrain.lowGear();
 		Mechanisms.servoClosed();
 		
-		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-		camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
+		//start cam1
+		cam = new Camera1("camStream");
+		cam.start();
+			
+		//start cam2
+		//cam2 = new Camera2("camStream2");
+		//cam2.start();
 		
-
-		    visionThread = new VisionThread(camera, new Pipeline(), pipeline -> {
-		        if (!pipeline.filterContoursOutput().isEmpty()) {
-		        	Rect r1 = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
-			        Rect r2 = Imgproc.boundingRect(pipeline.filterContoursOutput().get(1));
-		            synchronized (imgLock) {
-		            	centerX = Math.abs(r1.x - r2.x) / 2;
-		            	rectX1 = r1.x;
-		            	rectX2  = r2.x;
-		            }
-		        }
-		        else {
-		        	System.out.println("NOT SEEING ANYTHING!");
-		        }
-		    });
-		    visionThread.start();
+	    visionThread = new VisionThread(cam.getCamera(), new Pipeline(), pipeline -> {
+	        if (!pipeline.filterContoursOutput().isEmpty()) {
+	        	Rect r1 = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+		        Rect r2 = Imgproc.boundingRect(pipeline.filterContoursOutput().get(1));
+	            synchronized (imgLock) {
+	            	centerX = Math.abs(r1.x - r2.x) / 2;
+	            	rectX1 = r1.x;
+	            	rectX2  = r2.x;
+	            }
+	        }
+	        else {
+	        	System.out.println("NOT SEEING ANYTHING!");
+	        }
+	    });
+	    visionThread.start();
 		
 		
 		    
@@ -173,13 +186,13 @@ public class Robot extends IterativeRobot {
 		switch (autoSelected) {
 
 		case gearCenter:
-			
+			outputSensors();
 			if(center_forward1 == false){
 				
 				DriveTrain.move(.6, 0);
 				outputSensors();
 				
-				if(DriveTrain.readEncoderL() >= 60 && DriveTrain.readEncoderR() >= 60){
+				if(DriveTrain.readEncoderL() >= 81 || DriveTrain.readEncoderR() >= 81){
 					center_forward1 = true;
 					DriveTrain.stop();
 					DriveTrain.resetEncoders();
@@ -197,7 +210,7 @@ public class Robot extends IterativeRobot {
 				else if(center_backUp1 == false){
 						DriveTrain.move(-.5, 0);
 						outputSensors();
-						if(DriveTrain.readEncoderL() <= -15 && DriveTrain.readEncoderR() <= -15){
+						if(DriveTrain.readEncoderL() <= -15 || DriveTrain.readEncoderR() <= -15){
 							center_backUp1 = true;
 							DriveTrain.stop();
 							Mechanisms.gearClosed();
@@ -215,7 +228,7 @@ public class Robot extends IterativeRobot {
 					DriveTrain.move(.6, 0);
 					outputSensors();
 					
-					if(DriveTrain.readEncoderL() >= 60 && DriveTrain.readEncoderR() >= 60){
+					if(DriveTrain.readEncoderL() >= 81 || DriveTrain.readEncoderR() >= 81){
 						center_rightForward1 = true;
 						DriveTrain.stop();
 						DriveTrain.resetEncoders();
@@ -223,7 +236,6 @@ public class Robot extends IterativeRobot {
 			}
 					
 				else if (center_rightWait1 == false){
-						
 						Timer.delay(.5);
 						Mechanisms.gearOpen();
 						Timer.delay(1);
@@ -233,7 +245,7 @@ public class Robot extends IterativeRobot {
 				else if(center_rightBackUp1 == false){
 						DriveTrain.move(-.5, 0);
 						outputSensors();
-						if(DriveTrain.readEncoderL() <= -18 && DriveTrain.readEncoderR() <= -18){
+						if(DriveTrain.readEncoderL() <= -18 || DriveTrain.readEncoderR() <= -18){
 							DriveTrain.stop();
 							Mechanisms.gearClosed();
 							DriveTrain.turn(50);
@@ -248,7 +260,7 @@ public class Robot extends IterativeRobot {
 					System.out.println("2nd half started");
 					DriveTrain.move(.75, 0);
 					outputSensors();
-					if(DriveTrain.readEncoderL() > 80 && DriveTrain.readEncoderR() > 80){
+					if(DriveTrain.readEncoderL() > 80 || DriveTrain.readEncoderR() > 80){
 						DriveTrain.stop();
 						DriveTrain.resetEncoders();
 						center_rightForward2 = true;
@@ -265,7 +277,7 @@ public class Robot extends IterativeRobot {
 				DriveTrain.move(.6, 0);
 				outputSensors();
 				
-				if(DriveTrain.readEncoderL() >= 60 && DriveTrain.readEncoderR() >= 60){
+				if(DriveTrain.readEncoderL() >= 81 || DriveTrain.readEncoderR() >= 81){
 					center_leftForward1  = true;
 					DriveTrain.stop();
 					DriveTrain.resetEncoders();
@@ -283,7 +295,7 @@ public class Robot extends IterativeRobot {
 			else if(center_leftBackUp1 == false){
 					DriveTrain.move(-.5, 0);
 					outputSensors();
-					if(DriveTrain.readEncoderL() <= -24 && DriveTrain.readEncoderR() <= -24){
+					if(DriveTrain.readEncoderL() <= -24 || DriveTrain.readEncoderR() <= -24){
 						 DriveTrain.stop();
 						Mechanisms.gearClosed();
 						DriveTrain.turn(-50);
@@ -296,7 +308,7 @@ public class Robot extends IterativeRobot {
 			else if(center_leftForward2 == false){
 				DriveTrain.move(.75, 0);
 				outputSensors();
-				if(DriveTrain.readEncoderL() > 80 && DriveTrain.readEncoderR() > 80){
+				if(DriveTrain.readEncoderL() > 80 || DriveTrain.readEncoderR() > 80){
 					DriveTrain.stop();
 					DriveTrain.resetEncoders();
 					center_leftForward2 = true;
@@ -307,12 +319,12 @@ public class Robot extends IterativeRobot {
 		
 		
 		case gearLeft:
-			
+			outputSensors();
 			if(left_forward1 == false){
 				outputSensors();
 				DriveTrain.move(.6, 0);
 				
-				if(DriveTrain.readEncoderL() > 52 && DriveTrain.readEncoderR() > 52){
+				if(DriveTrain.readEncoderL() > 52 || DriveTrain.readEncoderR() > 52){
 					DriveTrain.stop();					
 					DriveTrain.turn(30);
 					DriveTrain.resetEncoders();
@@ -323,7 +335,7 @@ public class Robot extends IterativeRobot {
 				outputSensors();
 				DriveTrain.move(.5, 0);
 				
-				if(DriveTrain.readEncoderL() > 24 && DriveTrain.readEncoderR() > 24){
+				if(DriveTrain.readEncoderL() > 24 || DriveTrain.readEncoderR() > 24){
 					DriveTrain.stop();
 					Timer.delay(.5);
 					Mechanisms.gearOpen();
@@ -336,7 +348,7 @@ public class Robot extends IterativeRobot {
 			else if (left_backwards1 == false){
 				outputSensors();
 				DriveTrain.move(-.5, 0);
-				if(DriveTrain.readEncoderL() < -24 && DriveTrain.readEncoderR() < -24){
+				if(DriveTrain.readEncoderL() < -24 || DriveTrain.readEncoderR() < -24){
 				DriveTrain.stop();
 				DriveTrain.turn(-30);
 				DriveTrain.resetEncoders();
@@ -349,7 +361,7 @@ public class Robot extends IterativeRobot {
 			else if (left_forward3 == false){
 				outputSensors();
 				DriveTrain.move(.75, 0);
-				if(DriveTrain.readEncoderL() > 24 && DriveTrain.readEncoderR() > 24){
+				if(DriveTrain.readEncoderL() > 24 || DriveTrain.readEncoderR() > 24){
 					DriveTrain.stop();
 					DriveTrain.resetEncoders();
 				left_forward3 = true;	
@@ -361,12 +373,12 @@ public class Robot extends IterativeRobot {
 			break;
 			
 		case gearRight:
-
+			outputSensors();
 			if(right_forward1 == false){
 				outputSensors();
 				DriveTrain.move(.6, 0);
 				
-				if(DriveTrain.readEncoderL() > 52 && DriveTrain.readEncoderR() > 52){
+				if(DriveTrain.readEncoderL() > 52 || DriveTrain.readEncoderR() > 52){
 					DriveTrain.stop();					
 					DriveTrain.turn(30);
 					DriveTrain.resetEncoders();
@@ -377,7 +389,7 @@ public class Robot extends IterativeRobot {
 				outputSensors();
 				DriveTrain.move(.5, 0);
 				
-				if(DriveTrain.readEncoderL() > 24 && DriveTrain.readEncoderR() > 24){
+				if(DriveTrain.readEncoderL() > 24 || DriveTrain.readEncoderR() > 24){
 					DriveTrain.stop();
 					Timer.delay(.5);
 					Mechanisms.gearOpen();
@@ -390,7 +402,7 @@ public class Robot extends IterativeRobot {
 			else if (right_backwards1 == false){
 				outputSensors();
 				DriveTrain.move(-.5, 0);
-				if(DriveTrain.readEncoderL() < -24 && DriveTrain.readEncoderR() < -24){
+				if(DriveTrain.readEncoderL() < -24 || DriveTrain.readEncoderR() < -24){
 				DriveTrain.stop();
 				DriveTrain.turn(-30);
 				DriveTrain.resetEncoders();
@@ -403,7 +415,7 @@ public class Robot extends IterativeRobot {
 			else if (right_forward3 == false){
 				outputSensors();
 				DriveTrain.move(.75, 0);
-				if(DriveTrain.readEncoderL() > 24 && DriveTrain.readEncoderR() > 24){
+				if(DriveTrain.readEncoderL() > 24 || DriveTrain.readEncoderR() > 24){
 					DriveTrain.stop();
 					DriveTrain.resetEncoders();
 					right_forward3 = true;
@@ -416,11 +428,12 @@ public class Robot extends IterativeRobot {
 			
 		case doNothing:
 			DriveTrain.stop();
+			outputSensors();
 			break;
 			
 			
 		case lineOnly:
-				
+				outputSensors();
 			//drive forward
 			if (DriveTrain.readEncoderL() < 93 && DriveTrain.readEncoderR() < 93){
 				DriveTrain.move(.7, 0);
@@ -436,9 +449,45 @@ public class Robot extends IterativeRobot {
 		default:
 			// Put default auto code here
 			break;
-		}
-	}
 	
+	
+		case diagonalLine:
+			outputSensors();
+			if(diagonal_forward1 == false){
+				
+				DriveTrain.move(.6, 0);
+				outputSensors();
+				
+				if(DriveTrain.readEncoderL() >= 113 || DriveTrain.readEncoderR() >= 113){
+					diagonal_forward1 = true;
+					DriveTrain.stop();
+					DriveTrain.resetEncoders();
+				}
+			}
+					
+				else if (diagonal_wait1 == false){
+						
+						Timer.delay(.5);
+						Mechanisms.gearOpen();
+						Timer.delay(1);
+						diagonal_wait1 = true;
+				}
+						
+				else if(diagonal_backUp1 == false){
+						DriveTrain.move(-.5, 0);
+						outputSensors();
+						if(DriveTrain.readEncoderL() <= -15 || DriveTrain.readEncoderR() <= -15){
+							diagonal_backUp1 = true;
+							DriveTrain.stop();
+							Mechanisms.gearClosed();
+							DriveTrain.resetEncoders();
+						}							
+			}
+			break;
+			
+		}
+
+}
 	
 	
 	public void teleopInit(){
@@ -452,6 +501,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		outputSensors();
 		DriveTrain.joyMove();
 		joyStick.doButtons();
 		double rectX1;
@@ -502,6 +552,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
 		SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
 		SmartDashboard.putNumber("Yaw: ", DriveTrain.getYaw());
+		SmartDashboard.putNumber("Left Rate per Second", DriveTrain.rateEncoderL());
+		SmartDashboard.putNumber("Right Rate per Second", DriveTrain.rateEncoderR());
 	}
 }
 

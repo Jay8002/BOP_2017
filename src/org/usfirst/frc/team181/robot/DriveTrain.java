@@ -89,10 +89,16 @@ public class DriveTrain {
 	}
 	
 	public static double readEncoderL() {
-		return leftEncoder.getDistance();
+		return -leftEncoder.getDistance();
 	}
 	public static double readEncoderR() {
-		return rightEncoder.getDistance();
+		return -rightEncoder.getDistance();
+	}
+	public static double rateEncoderR(){
+		return rightEncoder.getRate();
+	}
+	public static double rateEncoderL(){
+		return leftEncoder.getRate();
 	}
 	public static void resetEncoders() {
 		leftEncoder.reset();
