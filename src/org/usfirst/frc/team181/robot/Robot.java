@@ -25,20 +25,7 @@ import edu.wpi.first.wpilibj.vision.VisionThread;
  */
 public class Robot extends IterativeRobot {
 
-	final String doNothing = "Do Nothing";
 
-	final String customAuto = "My Auto";
-	final String autoTurning = "Turning";
-	final String center_lineRight = "Right Line and Gear";
-	final String center_lineLeft = "Left Line and Gear";
-	final String customAuto1 = "Encoder Auto";
-	final String customAuto2 = "Gyro Auto";
-	final String gearCenter = "gear Center";
-	final String gearRight = "Right Gear";
-	final String gearLeft = "Left Gear";
-	final String centerTarget = "CenterTarget";
-	final String lineOnly = "lineOnly";
-	final String diagonalLine = "diagonalLine";
 	
 	private Camera1 cam;
 	//private Camera2 cam2;
@@ -56,45 +43,9 @@ public class Robot extends IterativeRobot {
 	double totalDistance = 0;
 	
 	
-	//for center gear
-	boolean center_forward1 = false;
-	boolean center_wait1 = false;
-	boolean center_backUp1 = false;
-	
-	//for diagonal gear
-	boolean diagonal_forward1 = false;
-	boolean diagonal_wait1 = false;
-	boolean diagonal_backUp1 = false;
-	
-	//for center gear and right line 
-	boolean center_rightForward1 = false;
-	boolean center_rightWait1 = false;
-	boolean center_rightBackUp1 = false;
-	boolean center_rightForward2 = false;
-	
-	//for center gear and left Line
-	
-	boolean center_leftForward1 = false;
-	boolean center_leftWait1 = false;
-	boolean center_leftBackUp1 = false;
-	boolean center_leftForward2 = false;
-	
-	
-	//for left gear
-	boolean left_forward1 = false;
-	boolean left_forward2 = false;
-	boolean left_forward3 = false;
-	boolean left_backwards1 = false;
-	
-
-	//for right gear
-	boolean right_forward1 = false;
-	boolean right_forward2 = false;
-	boolean right_forward3 = false;
-	boolean right_backwards1 = false;
-	
+	autonomous autonomous = new autonomous();
 	String autoSelected;
-	SendableChooser<String> chooser = new SendableChooser<>();
+
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -102,15 +53,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		chooser.addDefault("Do nothing", doNothing);
-		chooser.addObject("Center Gear", gearCenter);
-		//chooser.addObject("Right Gear", gearRight);
-		//chooser.addObject("Left Gear", gearLeft);
-		chooser.addObject("<-- Center Gear Left", center_lineLeft);
-		chooser.addObject("line Only", lineOnly);
-		chooser.addObject("Center Gear Right -->", center_lineRight);
-		chooser.addObject("diagonal Line",  diagonalLine);
-		SmartDashboard.putData("Auto choices", chooser);
+
+		SmartDashboard.putData("Auto choices", autonomous.chooser);
 		DriveTrain.setup();
 		
 		DriveTrain.lowGear();
@@ -165,14 +109,13 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		autoSelected = chooser.getSelected();
-		//autoSelected = SmartDashboard.getString("Auto Selector", doNothing);
 		System.out.println("Auto selected: " + autoSelected);
 		DriveTrain.resetEncoders();
 		//Zero out and get the Yaw of the robot from the Gyro
 		DriveTrain.zeroYaw();
 		DriveTrain.setup();
 		Mechanisms.gearClosed();
+		Mechanisms.servoClosed();
 
 	}
 
@@ -181,312 +124,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		
-
-		switch (autoSelected) {
-
-		case gearCenter:
-			outputSensors();
-			if(center_forward1 == false){
-				
-				DriveTrain.move(.6, 0);
-				outputSensors();
-				
-				if(DriveTrain.readEncoderL() >= 81 || DriveTrain.readEncoderR() >= 81){
-					center_forward1 = true;
-					DriveTrain.stop();
-					DriveTrain.resetEncoders();
-				}
-			}
-					
-				else if (center_wait1 == false){
-						
-						Timer.delay(.5);
-						Mechanisms.gearOpen();
-						Timer.delay(1);
-						center_wait1 = true;
-				}
-						
-				else if(center_backUp1 == false){
-						DriveTrain.move(-.5, 0);
-						outputSensors();
-						if(DriveTrain.readEncoderL() <= -15 || DriveTrain.readEncoderR() <= -15){
-							center_backUp1 = true;
-							DriveTrain.stop();
-							Mechanisms.gearClosed();
-							DriveTrain.resetEncoders();
-						}							
-			}
-			break;
-			
-			
-		case center_lineRight:
-			
-				outputSensors();
-				if(center_rightForward1 == false){
-				
-					DriveTrain.move(.6, 0);
-					outputSensors();
-					
-					if(DriveTrain.readEncoderL() >= 81 || DriveTrain.readEncoderR() >= 81){
-						center_rightForward1 = true;
-						DriveTrain.stop();
-						DriveTrain.resetEncoders();
-					}
-			}
-					
-				else if (center_rightWait1 == false){
-						Timer.delay(.5);
-						Mechanisms.gearOpen();
-						Timer.delay(1);
-						center_rightWait1 = true;
-				}
-						
-				else if(center_rightBackUp1 == false){
-						DriveTrain.move(-.5, 0);
-						outputSensors();
-						if(DriveTrain.readEncoderL() <= -18 || DriveTrain.readEncoderR() <= -18){
-							DriveTrain.stop();
-							Mechanisms.gearClosed();
-							DriveTrain.turn(50);
-							Timer.delay(.5);
-							DriveTrain.resetEncoders();
-							center_rightBackUp1 = true;
-						}	
-						System.out.println("Starting 2nd half");
-				}
-								
-				else if(center_rightForward2 == false){
-					System.out.println("2nd half started");
-					DriveTrain.move(.75, 0);
-					outputSensors();
-					if(DriveTrain.readEncoderL() > 80 || DriveTrain.readEncoderR() > 80){
-						DriveTrain.stop();
-						DriveTrain.resetEncoders();
-						center_rightForward2 = true;
-					}
-					
-				}
-			break;
-			
-		case center_lineLeft:
-			
-			outputSensors();
-			if(center_leftForward1 == false){
-			
-				DriveTrain.move(.6, 0);
-				outputSensors();
-				
-				if(DriveTrain.readEncoderL() >= 81 || DriveTrain.readEncoderR() >= 81){
-					center_leftForward1  = true;
-					DriveTrain.stop();
-					DriveTrain.resetEncoders();
-				}
-		}
-				
-			else if (center_leftWait1 == false){
-					
-					Timer.delay(.5);
-					Mechanisms.gearOpen();
-					Timer.delay(1);
-					center_leftWait1 = true;
-			}
-					
-			else if(center_leftBackUp1 == false){
-					DriveTrain.move(-.5, 0);
-					outputSensors();
-					if(DriveTrain.readEncoderL() <= -24 || DriveTrain.readEncoderR() <= -24){
-						 DriveTrain.stop();
-						Mechanisms.gearClosed();
-						DriveTrain.turn(-50);
-						Timer.delay(.5);
-						DriveTrain.resetEncoders();
-						center_leftBackUp1 = true;
-					}							
-			}
-			
-			else if(center_leftForward2 == false){
-				DriveTrain.move(.75, 0);
-				outputSensors();
-				if(DriveTrain.readEncoderL() > 80 || DriveTrain.readEncoderR() > 80){
-					DriveTrain.stop();
-					DriveTrain.resetEncoders();
-					center_leftForward2 = true;
-				}
-				
-			}
-		break;
-		
-		
-		case gearLeft:
-			outputSensors();
-			if(left_forward1 == false){
-				outputSensors();
-				DriveTrain.move(.6, 0);
-				
-				if(DriveTrain.readEncoderL() > 52 || DriveTrain.readEncoderR() > 52){
-					DriveTrain.stop();					
-					DriveTrain.turn(30);
-					DriveTrain.resetEncoders();
-					left_forward1 = true;
-				}
-			}
-			else if (left_forward2 == false){
-				outputSensors();
-				DriveTrain.move(.5, 0);
-				
-				if(DriveTrain.readEncoderL() > 24 || DriveTrain.readEncoderR() > 24){
-					DriveTrain.stop();
-					Timer.delay(.5);
-					Mechanisms.gearOpen();
-					Timer.delay(1);
-					DriveTrain.resetEncoders();
-					left_forward2 = true;
-				}
-			}
-			
-			else if (left_backwards1 == false){
-				outputSensors();
-				DriveTrain.move(-.5, 0);
-				if(DriveTrain.readEncoderL() < -24 || DriveTrain.readEncoderR() < -24){
-				DriveTrain.stop();
-				DriveTrain.turn(-30);
-				DriveTrain.resetEncoders();
-				left_backwards1 = true;
-				
-				}
-			}
-			
-			
-			else if (left_forward3 == false){
-				outputSensors();
-				DriveTrain.move(.75, 0);
-				if(DriveTrain.readEncoderL() > 24 || DriveTrain.readEncoderR() > 24){
-					DriveTrain.stop();
-					DriveTrain.resetEncoders();
-				left_forward3 = true;	
-				}
-				
-
-				
-			}
-			break;
-			
-		case gearRight:
-			outputSensors();
-			if(right_forward1 == false){
-				outputSensors();
-				DriveTrain.move(.6, 0);
-				
-				if(DriveTrain.readEncoderL() > 52 || DriveTrain.readEncoderR() > 52){
-					DriveTrain.stop();					
-					DriveTrain.turn(30);
-					DriveTrain.resetEncoders();
-					right_forward1 = true;
-				}
-			}
-			else if (right_forward2 == false){
-				outputSensors();
-				DriveTrain.move(.5, 0);
-				
-				if(DriveTrain.readEncoderL() > 24 || DriveTrain.readEncoderR() > 24){
-					DriveTrain.stop();
-					Timer.delay(.5);
-					Mechanisms.gearOpen();
-					Timer.delay(1);
-					DriveTrain.resetEncoders();
-					right_forward2 = true;
-				}
-			}
-			
-			else if (right_backwards1 == false){
-				outputSensors();
-				DriveTrain.move(-.5, 0);
-				if(DriveTrain.readEncoderL() < -24 || DriveTrain.readEncoderR() < -24){
-				DriveTrain.stop();
-				DriveTrain.turn(-30);
-				DriveTrain.resetEncoders();
-				right_backwards1=true;
-				
-				}
-			}
-			
-			
-			else if (right_forward3 == false){
-				outputSensors();
-				DriveTrain.move(.75, 0);
-				if(DriveTrain.readEncoderL() > 24 || DriveTrain.readEncoderR() > 24){
-					DriveTrain.stop();
-					DriveTrain.resetEncoders();
-					right_forward3 = true;
-				}
-				
-
-				
-			}
-			break;
-			
-		case doNothing:
-			DriveTrain.stop();
-			outputSensors();
-			break;
-			
-			
-		case lineOnly:
-				outputSensors();
-			//drive forward
-			if (DriveTrain.readEncoderL() < 93 && DriveTrain.readEncoderR() < 93){
-				DriveTrain.move(.7, 0);
-				SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
-				SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
-				
-			}
-			else if (DriveTrain.readEncoderL() >= 93 && DriveTrain.readEncoderR() >= 93){
-			  	DriveTrain.stop();
-			  }
-			  break;
-			
-		default:
-			// Put default auto code here
-			break;
-	
-	
-		case diagonalLine:
-			outputSensors();
-			if(diagonal_forward1 == false){
-				
-				DriveTrain.move(.6, 0);
-				outputSensors();
-				
-				if(DriveTrain.readEncoderL() >= 113 || DriveTrain.readEncoderR() >= 113){
-					diagonal_forward1 = true;
-					DriveTrain.stop();
-					DriveTrain.resetEncoders();
-				}
-			}
-					
-				else if (diagonal_wait1 == false){
-						
-						Timer.delay(.5);
-						Mechanisms.gearOpen();
-						Timer.delay(1);
-						diagonal_wait1 = true;
-				}
-						
-				else if(diagonal_backUp1 == false){
-						DriveTrain.move(-.5, 0);
-						outputSensors();
-						if(DriveTrain.readEncoderL() <= -15 || DriveTrain.readEncoderR() <= -15){
-							diagonal_backUp1 = true;
-							DriveTrain.stop();
-							Mechanisms.gearClosed();
-							DriveTrain.resetEncoders();
-						}							
-			}
-			break;
-			
-		}
-
+		autonomous.doAutonomous();
 }
 	
 	
@@ -548,7 +186,7 @@ public class Robot extends IterativeRobot {
 		*/
 	}
 	
-	public void outputSensors(){
+	public static void outputSensors(){
 		SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
 		SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
 		SmartDashboard.putNumber("Yaw: ", DriveTrain.getYaw());

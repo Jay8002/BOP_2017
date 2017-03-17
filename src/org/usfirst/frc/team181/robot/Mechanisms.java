@@ -14,10 +14,10 @@ public class Mechanisms{
 	static VictorSP fuelAgitator = new VictorSP(3);
 	
 	public static void servoClosed(){
-		climberServo.setAngle(38);
+		climberServo.setAngle(90);
 	}
 	public static void servoOpen(){
-		climberServo.setAngle(90);
+		climberServo.setAngle(38);
 	}
 	public static void gearOpen (){
 		gearSolenoid.set(DoubleSolenoid.Value.kForward);
@@ -28,6 +28,9 @@ public class Mechanisms{
 	}
 	public static void shooterOn() {
 		shooterMotor.set(convertThrottle());
+	}
+	public static void shooterOn(double speed){
+		shooterMotor.set(speed);
 	}
 	public static void shooterOff() {
 		shooterMotor.set(0);
