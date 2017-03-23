@@ -21,9 +21,19 @@ public class autonomous {
 	final String gearCenter = "gear Center";
 	final String boiler = "Boiler";
 	final String gearLeft = "Left Gear";
+	final String gearRight = "Right Gear";
 	final String centerTarget = "CenterTarget";
 	final String lineOnly = "lineOnly";
-	final String boilerShoot = "boiler and shoot";
+	final String rightShoot = "right gear and shoot";
+	
+	
+	//for left gear
+	boolean leftBackUp1  = false;
+	boolean leftForward = false;
+	boolean leftForward1 = false;
+	boolean leftForward2 = false;
+	boolean leftWait1 = false;
+	
 	
 	
 	//for center gear
@@ -41,6 +51,12 @@ public class autonomous {
 	boolean diagonal_forward1 = false;
 	boolean diagonal_wait1 = false;
 	boolean diagonal_backUp1 = false;
+	
+	//for right gear and shooter
+	boolean RshootBackUp1 = false;
+	boolean RshootForward1 = false;
+	boolean RshootForward2 = false;
+	boolean RshootWait1 = false;
 	
 	//for center gear and right line 
 	boolean center_rightForward1 = false;
@@ -67,18 +83,24 @@ public class autonomous {
 	boolean right_forward1 = false;
 	boolean right_forward2 = false;
 	boolean right_forward3 = false;
-	boolean right_backwards1 = false;
+	boolean right_backUp1 = false;
+	boolean right_wait1 = false;
+	
+	//for boiler
+	boolean boiler_backUp1 = false;
+	boolean boiler_forward1 = false;
+	boolean boiler_wait1 = false;
 	
 	public autonomous(){
 		chooser.addDefault("Do nothing", doNothing);
 		chooser.addObject("Center Gear", gearCenter);
 		chooser.addObject("Boiler", boiler);
-		//chooser.addObject("Left Gear", gearLeft);
+		chooser.addObject("Left Gear", gearLeft);
 		chooser.addObject("<-- Center Gear Left", center_lineLeft);
 		chooser.addObject("line Only", lineOnly);
 		chooser.addObject("Center Gear Right -->", center_lineRight);
-		chooser.addObject("boiler and shoot",  boilerShoot);
-		
+		chooser.addObject("right gear and shoot",  rightShoot);
+		chooser.addObject("Right Gear", gearRight);
 	}
 
 	public void doAutonomous(){
@@ -131,7 +153,7 @@ public class autonomous {
 					if(DriveTrain.readEncoderL() >= 81 || DriveTrain.readEncoderR() >= 81){
 						center_rightForward1 = true;
 						DriveTrain.stop();
-						DriveTrain.resetEncoders();
+													DriveTrain.resetEncoders();
 					}
 			}
 					
@@ -145,10 +167,10 @@ public class autonomous {
 				else if(center_rightBackUp1 == false){
 						DriveTrain.move(-.5, 0);
 						Robot.outputSensors();
-						if(DriveTrain.readEncoderL() <= -18 || DriveTrain.readEncoderR() <= -18){
+						if(DriveTrain.readEncoderL() <= -20 || DriveTrain.readEncoderR() <= -20){
 							DriveTrain.stop();
 							Mechanisms.gearClosed();
-							DriveTrain.turn(50);
+							DriveTrain.turn(58);
 							Timer.delay(.5);
 							DriveTrain.resetEncoders();
 							center_rightBackUp1 = true;
@@ -160,7 +182,7 @@ public class autonomous {
 					System.out.println("2nd half started");
 					DriveTrain.move(.75, 0);
 					Robot.outputSensors();
-					if(DriveTrain.readEncoderL() > 80 || DriveTrain.readEncoderR() > 80){
+					if(DriveTrain.readEncoderL() > 60 || DriveTrain.readEncoderR() > 60){
 						DriveTrain.stop();
 						DriveTrain.resetEncoders();
 						center_rightForward2 = true;
@@ -195,10 +217,10 @@ public class autonomous {
 			else if(center_leftBackUp1 == false){
 					DriveTrain.move(-.5, 0);
 					Robot.outputSensors();
-					if(DriveTrain.readEncoderL() <= -24 || DriveTrain.readEncoderR() <= -24){
+					if(DriveTrain.readEncoderL() <= -20 || DriveTrain.readEncoderR() <= -20){
 						 DriveTrain.stop();
 						Mechanisms.gearClosed();
-						DriveTrain.turn(-50);
+						DriveTrain.turn(-58);
 						Timer.delay(.5);
 						DriveTrain.resetEncoders();
 						center_leftBackUp1 = true;
@@ -208,8 +230,9 @@ public class autonomous {
 			else if(center_leftForward2 == false){
 				DriveTrain.move(.75, 0);
 				Robot.outputSensors();
-				if(DriveTrain.readEncoderL() > 80 || DriveTrain.readEncoderR() > 80){
+				if(DriveTrain.readEncoderL() > 60 || DriveTrain.readEncoderR() > 60){
 					DriveTrain.stop();
+
 					DriveTrain.resetEncoders();
 					center_leftForward2 = true;
 				}
@@ -218,87 +241,79 @@ public class autonomous {
 		break;
 		
 		
-		case gearLeft:
+		case gearRight:
 			Robot.outputSensors();
-			if(left_forward1 == false){
-				Robot.outputSensors();
+			if(right_forward1 == false){
+			
 				DriveTrain.move(.6, 0);
+				Robot.outputSensors();
 				
-				if(DriveTrain.readEncoderL() > 52 || DriveTrain.readEncoderR() > 52){
-					DriveTrain.stop();					
-					DriveTrain.turn(30);
+				if(DriveTrain.readEncoderL() >= 70 || DriveTrain.readEncoderR() >= 70){
+					DriveTrain.turn(-60);
+					right_forward1  = true;
+					DriveTrain.stop();
 					DriveTrain.resetEncoders();
-					left_forward1 = true;
+				}
+		}
+			else if (right_forward2 == false){
+				DriveTrain.move(.6, 0);
+				Robot.outputSensors();
+				
+				if (DriveTrain.readEncoderL() >= 84 || DriveTrain.readEncoderR() >= 84){
+					right_forward2 = true;
+					DriveTrain.stop();
+					DriveTrain.resetEncoders();
 				}
 			}
-			else if (left_forward2 == false){
-				Robot.outputSensors();
-				DriveTrain.move(.5, 0);
-				
-				if(DriveTrain.readEncoderL() > 24 || DriveTrain.readEncoderR() > 24){
-					DriveTrain.stop();
+			else if (right_wait1 == false){
+					
 					Timer.delay(.5);
 					Mechanisms.gearOpen();
 					Timer.delay(1);
-					DriveTrain.resetEncoders();
-					left_forward2 = true;
-				}
+					right_wait1 = true;
+			}
+					
+			else if(right_backUp1 == false){
+					DriveTrain.move(-.5, 0);
+					Robot.outputSensors();
+					if(DriveTrain.readEncoderL() <= -20 || DriveTrain.readEncoderR() <= -20){
+						 DriveTrain.stop();
+						Mechanisms.gearClosed();
+						DriveTrain.resetEncoders();
+						right_backUp1 = true;
+					}							
 			}
 			
-			else if (left_backwards1 == false){
-				Robot.outputSensors();
-				DriveTrain.move(-.5, 0);
-				if(DriveTrain.readEncoderL() < -24 || DriveTrain.readEncoderR() < -24){
-				DriveTrain.stop();
-				DriveTrain.turn(-30);
-				DriveTrain.resetEncoders();
-				left_backwards1 = true;
-				
-				}
-			}
-			
-			
-			else if (left_forward3 == false){
-				Robot.outputSensors();
-				DriveTrain.move(.75, 0);
-				if(DriveTrain.readEncoderL() > 24 || DriveTrain.readEncoderR() > 24){
-					DriveTrain.stop();
-					DriveTrain.resetEncoders();
-				left_forward3 = true;	
-				}
-				
-
-				
-			}
-			break;
+		break;
+		
 			
 		case boiler:
 			Robot.outputSensors();
-			if(center_forward1 == false){
+			if(boiler_forward1 == false){
 				
 				DriveTrain.move(.6, 0);
 				Robot.outputSensors();
 			
 				if(DriveTrain.readEncoderL() >= 110 || DriveTrain.readEncoderR() >= 110){
-					center_forward1 = true;
+					boiler_forward1 = true;
 					DriveTrain.stop();
 					DriveTrain.resetEncoders();
 				}
 			}
 					
-				else if (center_wait1 == false){
+				else if (boiler_wait1 == false){
 						
 						Timer.delay(.5);
 						Mechanisms.gearOpen();
 						Timer.delay(1);
-						center_wait1 = true;
+						boiler_wait1 = true;
 				}
 						
-				else if(center_backUp1 == false){
+				else if(boiler_backUp1 == false){
 						DriveTrain.move(-.5, 0);
 						Robot.outputSensors();
 						if(DriveTrain.readEncoderL() <= -15 || DriveTrain.readEncoderR() <= -15){
-							center_backUp1 = true;
+							boiler_backUp1 = true;
 							DriveTrain.stop();
 							Mechanisms.gearClosed();
 							DriveTrain.resetEncoders();
@@ -333,46 +348,100 @@ public class autonomous {
 			break;
 	
 	
-		case boilerShoot:
+		case rightShoot:
 			Robot.outputSensors();
-			if(shoot_forward1 == false){
-				
+			if(RshootForward1 == false){
+			
 				DriveTrain.move(.6, 0);
 				Robot.outputSensors();
-			
-				if(DriveTrain.readEncoderL() >= 110 || DriveTrain.readEncoderR() >= 110){
-					shoot_forward1 = true;
+				
+				if(DriveTrain.readEncoderL() >= 70 || DriveTrain.readEncoderR() >= 70){
+					DriveTrain.turn(-60);
+					RshootForward1  = true;
+					DriveTrain.stop();
+					DriveTrain.resetEncoders();
+				}
+		}
+			else if (RshootForward2 == false){
+				DriveTrain.move(.6, 0);
+				Robot.outputSensors();
+				
+				if (DriveTrain.readEncoderL() >= 84 || DriveTrain.readEncoderR() >= 84){
+					RshootForward2 = true;
 					DriveTrain.stop();
 					DriveTrain.resetEncoders();
 				}
 			}
+			else if (RshootWait1 == false){
 					
-				else if (shoot_wait1 == false){
-						
-						Timer.delay(.5);
-						Mechanisms.gearOpen();
-						Timer.delay(1);
-						shoot_wait1 = true;
-				}
-						
-				else if(shoot_backUp1 == false){
-						DriveTrain.move(-.5, 0);
-						Mechanisms.shooterOn(1);
-						Robot.outputSensors();
-						if(DriveTrain.readEncoderL() <= -54 || DriveTrain.readEncoderR() <= -54){
-							shoot_backUp1 = true;
-							DriveTrain.stop();
-							Mechanisms.gearClosed();
-							DriveTrain.resetEncoders();
-						}							
+					Timer.delay(.5);
+					Mechanisms.gearOpen();
+					Timer.delay(1);
+					RshootWait1 = true;
 			}
-			
-				else if(shoot_shoot == false){
-					Mechanisms.agitateFuel();
 					
-				}
+			else if(RshootBackUp1 == false){
+					DriveTrain.move(-.5, 0);
+					Robot.outputSensors();
+					if(DriveTrain.readEncoderL() <= -60 || DriveTrain.readEncoderR() <= -60){
+						 DriveTrain.stop();
+						Mechanisms.gearClosed();
+						DriveTrain.resetEncoders();
+						DriveTrain.zeroYaw();
+						DriveTrain.turn(20);
+						//Mechanisms.agitateFuel();
+						Mechanisms.shooterOn(1);
+						RshootBackUp1 = true;
+					}							
+			}
 			break;
 			
+			
+			
+		case gearLeft:
+			Robot.outputSensors();
+			if(leftForward1 == false){
+			
+				DriveTrain.move(.6, 0);
+				Robot.outputSensors();
+				
+				if(DriveTrain.readEncoderL() >= 70 || DriveTrain.readEncoderR() >= 70){
+					DriveTrain.turn(60);
+					leftForward1  = true;
+					DriveTrain.stop();
+					DriveTrain.resetEncoders();
+				}
+		}
+			else if (leftForward2 == false){
+				DriveTrain.move(.6, 0);
+				Robot.outputSensors();
+				
+				if (DriveTrain.readEncoderL() >= 84 || DriveTrain.readEncoderR() >= 84){
+					leftForward2 = true;
+					DriveTrain.stop();
+					DriveTrain.resetEncoders();
+				}
+			}
+			else if (leftWait1 == false){
+					
+					Timer.delay(.5);
+					Mechanisms.gearOpen();
+					Timer.delay(1);
+					leftWait1 = true;
+			}
+					
+			else if(leftBackUp1 == false){
+					DriveTrain.move(-.5, 0);
+					Robot.outputSensors();
+					if(DriveTrain.readEncoderL() <= -20 || DriveTrain.readEncoderR() <= -20){
+						 DriveTrain.stop();
+						Mechanisms.gearClosed();
+						DriveTrain.resetEncoders();
+						leftBackUp1 = true;
+					}							
+			}
+			
+		break;
 		}
 
 		
