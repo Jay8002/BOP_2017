@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.vision.VisionThread;
 public class Robot extends IterativeRobot {
 
 
-	
+	DriverStation.Alliance color;
 	private Camera1 cam;
 	//private Camera2 cam2;
 	public static final int IMG_WIDTH = 640;
@@ -68,22 +68,6 @@ public class Robot extends IterativeRobot {
 		//cam2 = new Camera2("camStream2");
 		//cam2.start();
 		
-	    visionThread = new VisionThread(cam.getCamera(), new Pipeline(), pipeline -> {
-	        if (!pipeline.filterContoursOutput().isEmpty()) {
-	        	Rect r1 = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
-		        Rect r2 = Imgproc.boundingRect(pipeline.filterContoursOutput().get(1));
-	            synchronized (imgLock) {
-	            	centerX = Math.abs(r1.x - r2.x) / 2;
-	            	rectX1 = r1.x;
-	            	rectX2  = r2.x;
-	            }
-	        }
-	        else {
-	        	System.out.println("NOT SEEING ANYTHING!");
-	        }
-	    });
-	    visionThread.start();
-		
 		
 		    
 		    
@@ -109,6 +93,16 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		SmartDashboard.putData("Auto choices", autonomous.chooser);
+		
+		color= DriverStation.getInstance().getAlliance();
+		
+		if (color == DriverStation.Alliance.Blue){
+			autonomous.isRed = false;
+		}
+		if(color == DriverStation.Alliance.Red){
+			autonomous.isRed = true;
+		}
 		System.out.println("Auto selected: " + autoSelected);
 		DriveTrain.resetEncoders();
 		//Zero out and get the Yaw of the robot from the Gyro

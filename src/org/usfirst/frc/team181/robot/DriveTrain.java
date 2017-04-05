@@ -40,8 +40,23 @@ public class DriveTrain {
         
 	}
 	
+	public static void pidMove (double speed){
+		if(DriveTrain.readEncoderL() == DriveTrain.readEncoderR()){
+			DriveTrain.moveLR(-speed, -speed);
+		}
+		if(DriveTrain.readEncoderL() > DriveTrain.readEncoderR()){
+			DriveTrain.moveLR(-speed + .05, -speed);
+		}
+		if(DriveTrain.readEncoderL() < DriveTrain.readEncoderR()){
+			DriveTrain.moveLR(-speed - 0.05, -speed);
+		}
+	}
+	
 	public static void move (double y, double z){ 		
-			robotDrive.arcadeDrive(-y, z);	
+		robotDrive.arcadeDrive(-y, z);
+	}
+	public static void moveLR (double l, double r){
+		robotDrive.tankDrive(l, r);
 	}
 
 	/*public static void move (){
@@ -59,11 +74,11 @@ public class DriveTrain {
 		for (double i = getYaw();  i >= angle+5 || i <= angle-5 ; i = getYaw()){
 			
 			if (i < angle){
-				move(0, -.5);
+				move(0, -.6);
 				stop();
 			}
 			if (i > angle){
-				move(0, .5);
+				move(0, .6);
 				stop();
 			}
 			
@@ -89,10 +104,10 @@ public class DriveTrain {
 	}
 	
 	public static double readEncoderL() {
-		return leftEncoder.getDistance();
+		return -leftEncoder.getDistance();
 	}
 	public static double readEncoderR() {
-		return rightEncoder.getDistance();
+		return -rightEncoder.getDistance();
 	}
 	public static double rateEncoderR(){
 		return rightEncoder.getRate();

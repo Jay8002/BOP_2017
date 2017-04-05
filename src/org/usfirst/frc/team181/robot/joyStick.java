@@ -13,9 +13,11 @@ public class joyStick {
 	static boolean climbing = false;
 	static boolean processing = false;
 	static JoystickButton seven = new JoystickButton(joystick, 7);
-			
+	
 	//create joystick buttons
 	JoystickButton gearButton = new JoystickButton(joystick, 1);
+	JoystickButton openShooter = new JoystickButton(opStick, 12);
+	JoystickButton closeShooter = new JoystickButton(opStick, 11);
 	
 	public static void doButtons(){
 		if(joystick.getRawButton(1) == true && highGear == false){
@@ -69,6 +71,12 @@ public class joyStick {
 		}
 		if(opStick.getRawButton(9) == true){
 			Mechanisms.reverseAgitate();
+		}
+		if(opStick.getRawButton(11) == true){
+			Mechanisms.closeShooter();
+		}
+		if(opStick.getRawButton(12) == true){
+			Mechanisms.openShooter();
 		}
 	}
 	

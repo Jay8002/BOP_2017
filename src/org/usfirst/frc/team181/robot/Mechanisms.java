@@ -12,12 +12,21 @@ public class Mechanisms{
 	static boolean gear_closed = true;
 	static Servo climberServo = new Servo(7);
 	static VictorSP fuelAgitator = new VictorSP(3);
+	static Servo shootDoor = new Servo(4);
+	
+	public static void openShooter (){
+		shootDoor.setAngle(0);
+	}
+	
+	public static void closeShooter (){
+		shootDoor.setAngle(45);
+	}
 	
 	public static void servoClosed(){
-		climberServo.setAngle(90);
+		climberServo.setAngle(38);
 	}
 	public static void servoOpen(){
-		climberServo.setAngle(38);
+		climberServo.setAngle(90);
 	}
 	public static void gearOpen (){
 		gearSolenoid.set(DoubleSolenoid.Value.kForward);
