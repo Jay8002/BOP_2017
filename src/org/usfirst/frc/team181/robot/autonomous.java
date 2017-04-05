@@ -143,7 +143,7 @@ public class autonomous {
 			Robot.outputSensors();
 			if(center_forward1 == false){
 				
-				DriveTrain.move(.6, 0);
+				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 			
 				if(DriveTrain.readEncoderL() >= 81 || DriveTrain.readEncoderR() >= 81){
@@ -162,7 +162,7 @@ public class autonomous {
 				}
 						
 				else if(center_backUp1 == false){
-						DriveTrain.move(-.5, 0);
+						DriveTrain.pidBackward(-.5);
 						Robot.outputSensors();
 						if(DriveTrain.readEncoderL() <= -15 || DriveTrain.readEncoderR() <= -15){
 							center_backUp1 = true;
@@ -178,7 +178,7 @@ public class autonomous {
 			Robot.outputSensors();
 			if(centerShoot_forward1 == false){
 				
-				DriveTrain.move(.7, 0);
+				DriveTrain.pidForward(.7);
 				Robot.outputSensors();
 			
 				if(DriveTrain.readEncoderL() >= 81 || DriveTrain.readEncoderR() >= 81){
@@ -197,7 +197,7 @@ public class autonomous {
 				}
 						
 				else if(centerShoot_backUp1 == false){
-						DriveTrain.move(-.5, 0);
+						DriveTrain.pidBackward(-.5);
 						Robot.outputSensors();
 						if(DriveTrain.readEncoderL() <= -15 || DriveTrain.readEncoderR() <= -15){
 							centerShoot_backUp1 = true;
@@ -214,7 +214,7 @@ public class autonomous {
 						}							
 				}
 				else if (centerShoot_backUp2 == false){
-					DriveTrain.move(-.5, 0);
+					DriveTrain.pidBackward(-.5);
 					Robot.outputSensors();
 					if(DriveTrain.readEncoderL() <= -48 || DriveTrain.readEncoderR() <= -48){
 						centerShoot_backUp2 = true;
@@ -232,13 +232,13 @@ public class autonomous {
 				Robot.outputSensors();
 				if(center_rightForward1 == false){
 				
-					DriveTrain.move(.6, 0);
+					DriveTrain.pidForward(.6);
 					Robot.outputSensors();
 					
 					if(DriveTrain.readEncoderL() >= 81 || DriveTrain.readEncoderR() >= 81){
 						center_rightForward1 = true;
 						DriveTrain.stop();
-													DriveTrain.resetEncoders();
+						DriveTrain.resetEncoders();
 					}
 			}
 					
@@ -250,7 +250,7 @@ public class autonomous {
 				}
 						
 				else if(center_rightBackUp1 == false){
-						DriveTrain.move(-.5, 0);
+						DriveTrain.pidBackward(-.5);
 						Robot.outputSensors();
 						if(DriveTrain.readEncoderL() <= -20 || DriveTrain.readEncoderR() <= -20){
 							DriveTrain.stop();
@@ -265,7 +265,7 @@ public class autonomous {
 								
 				else if(center_rightForward2 == false){
 					System.out.println("2nd half started");
-					DriveTrain.move(.75, 0);
+					DriveTrain.pidForward(.75);
 					Robot.outputSensors();
 					if(DriveTrain.readEncoderL() > 60 || DriveTrain.readEncoderR() > 60){
 						DriveTrain.stop();
@@ -281,7 +281,7 @@ public class autonomous {
 			Robot.outputSensors();
 			if(center_leftForward1 == false){
 			
-				DriveTrain.move(.6, 0);
+				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 				
 				if(DriveTrain.readEncoderL() >= 81 || DriveTrain.readEncoderR() >= 81){
@@ -300,7 +300,7 @@ public class autonomous {
 			}
 					
 			else if(center_leftBackUp1 == false){
-					DriveTrain.move(-.5, 0);
+					DriveTrain.pidBackward(-.5);
 					Robot.outputSensors();
 					if(DriveTrain.readEncoderL() <= -20 || DriveTrain.readEncoderR() <= -20){
 						 DriveTrain.stop();
@@ -313,7 +313,7 @@ public class autonomous {
 			}
 			
 			else if(center_leftForward2 == false){
-				DriveTrain.move(.75, 0);
+				DriveTrain.pidForward(.75);
 				Robot.outputSensors();
 				if(DriveTrain.readEncoderL() > 60 || DriveTrain.readEncoderR() > 60){
 					DriveTrain.stop();
@@ -330,7 +330,7 @@ public class autonomous {
 			Robot.outputSensors();
 			if(right_forward1 == false){
 			
-				DriveTrain.move(.6, 0);
+				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 				
 				if(DriveTrain.readEncoderL() >= 70 || DriveTrain.readEncoderR() >= 70){
@@ -346,7 +346,7 @@ public class autonomous {
 				}
 		}
 			else if (right_forward2 == false){
-				DriveTrain.move(.6, 0);
+				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 				
 				if (DriveTrain.readEncoderL() >= 84 || DriveTrain.readEncoderR() >= 84){
@@ -364,7 +364,7 @@ public class autonomous {
 			}
 					
 			else if(right_backUp1 == false){
-					DriveTrain.move(-.5, 0);
+					DriveTrain.pidBackward(-.5);
 					Robot.outputSensors();
 					if(DriveTrain.readEncoderL() <= -20 || DriveTrain.readEncoderR() <= -20){
 						 DriveTrain.stop();
@@ -381,7 +381,7 @@ public class autonomous {
 			Robot.outputSensors();
 			if(midRight_forward1 == false){
 			
-				DriveTrain.move(.6, 0);
+				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 				
 				if(DriveTrain.readEncoderL() >= 102 || DriveTrain.readEncoderR() >= 102){
@@ -392,7 +392,7 @@ public class autonomous {
 				}
 		}
 			else if (midRight_forward2 == false){
-				DriveTrain.move(.6, 0);
+				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 				
 				if (DriveTrain.readEncoderL() >= 24 || DriveTrain.readEncoderR() >= 24){
@@ -410,7 +410,7 @@ public class autonomous {
 			}
 					
 			else if(midRight_backUp1 == false){
-					DriveTrain.move(-.5, 0);
+					DriveTrain.pidBackward(-.5);
 					Robot.outputSensors();
 					if(DriveTrain.readEncoderL() <= -20 || DriveTrain.readEncoderR() <= -20){
 						 DriveTrain.stop();
@@ -429,7 +429,7 @@ public class autonomous {
 			Robot.outputSensors();
 			if(midLeft_forward1 == false){
 			
-				DriveTrain.move(.6, 0);
+				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 				
 				if(DriveTrain.readEncoderL() >= 102 || DriveTrain.readEncoderR() >= 102){
@@ -440,7 +440,7 @@ public class autonomous {
 				}
 		}
 			else if (midLeft_forward2 == false){
-				DriveTrain.move(.6, 0);
+				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 				
 				if (DriveTrain.readEncoderL() >= 24 || DriveTrain.readEncoderR() >= 24){
@@ -458,7 +458,7 @@ public class autonomous {
 			}
 					
 			else if(midLeft_backUp1 == false){
-					DriveTrain.move(-.5, 0);
+					DriveTrain.pidBackward(-.5);
 					Robot.outputSensors();
 					if(DriveTrain.readEncoderL() <= -20 || DriveTrain.readEncoderR() <= -20){
 						 DriveTrain.stop();
@@ -476,7 +476,7 @@ public class autonomous {
 			Robot.outputSensors();
 			if(boiler_forward1 == false){
 				
-				DriveTrain.move(.6, 0);
+				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 			
 				if(DriveTrain.readEncoderL() >= 110 || DriveTrain.readEncoderR() >= 110){
@@ -495,7 +495,7 @@ public class autonomous {
 				}
 						
 				else if(boiler_backUp1 == false){
-						DriveTrain.move(-.5, 0);
+						DriveTrain.pidBackward(-.5);
 						Robot.outputSensors();
 						if(DriveTrain.readEncoderL() <= -15 || DriveTrain.readEncoderR() <= -15){
 							boiler_backUp1 = true;
@@ -518,7 +518,7 @@ public class autonomous {
 				Robot.outputSensors();
 			//drive forward
 			if (DriveTrain.readEncoderL() < 93 && DriveTrain.readEncoderR() < 93){
-				DriveTrain.move(.7, 0);
+				DriveTrain.pidForward(.7);
 				SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
 				SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
 				
@@ -537,7 +537,7 @@ public class autonomous {
 			Robot.outputSensors();
 			if(RshootForward1 == false){
 			
-				DriveTrain.move(.6, 0);
+				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 				
 				if(DriveTrain.readEncoderL() >= 102 || DriveTrain.readEncoderR() >= 102){
@@ -553,7 +553,7 @@ public class autonomous {
 				}
 		}
 			else if (RshootForward2 == false){
-				DriveTrain.move(.6, 0);
+				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 				
 				if (DriveTrain.readEncoderL() >= 24 || DriveTrain.readEncoderR() >= 24){
@@ -571,7 +571,7 @@ public class autonomous {
 			}
 					
 			else if(RshootBackUp1 == false){
-					DriveTrain.move(-.5, 0);
+					DriveTrain.pidBackward(-.5);
 					Robot.outputSensors();
 					if(DriveTrain.readEncoderL() <= -60 || DriveTrain.readEncoderR() <= -60){
 						 DriveTrain.stop();
@@ -598,7 +598,7 @@ public class autonomous {
 			Robot.outputSensors();
 			if(leftForward1 == false){
 			
-				DriveTrain.move(.6, 0);
+				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 				
 				if(DriveTrain.readEncoderL() >= 70 || DriveTrain.readEncoderR() >= 70){
@@ -609,7 +609,7 @@ public class autonomous {
 				}
 		}
 			else if (leftForward2 == false){
-				DriveTrain.move(.6, 0);
+				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 				
 				if (DriveTrain.readEncoderL() >= 84 || DriveTrain.readEncoderR() >= 84){
@@ -627,7 +627,7 @@ public class autonomous {
 			}
 					
 			else if(leftBackUp1 == false){
-					DriveTrain.move(-.5, 0);
+					DriveTrain.pidBackward(-.5);
 					Robot.outputSensors();
 					if(DriveTrain.readEncoderL() <= -20 || DriveTrain.readEncoderR() <= -20){
 						 DriveTrain.stop();
@@ -643,7 +643,7 @@ public class autonomous {
 		case pidTest:
 			Robot.outputSensors();
 			if(pid_forward1 == false){
-				DriveTrain.pidMove(.6);
+				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 			
 				if(DriveTrain.readEncoderL() >= 81 || DriveTrain.readEncoderR() >= 81){
