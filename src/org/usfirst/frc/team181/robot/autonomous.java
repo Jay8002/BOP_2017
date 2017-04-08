@@ -203,7 +203,7 @@ public class autonomous {
 							centerShoot_backUp1 = true;
 							DriveTrain.stop();
 							Mechanisms.gearClosed();
-							Mechanisms.shooterOn(.8);
+							Mechanisms.shooterOn(.78);
 							if(isRed == true){
 								DriveTrain.turn(-65);
 							}
