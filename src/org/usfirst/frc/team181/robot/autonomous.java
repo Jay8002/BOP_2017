@@ -122,17 +122,17 @@ public class autonomous {
 		chooser.addDefault("Do nothing", doNothing);
 		chooser.addObject("Center Gear", gearCenter);
 		chooser.addObject("Boiler", boiler);
-		chooser.addObject("Airship Left Gear", gearLeft);
+		//chooser.addObject("Airship Left Gear", gearLeft);
 		chooser.addObject("<-- Center Gear Left", center_lineLeft);
 		chooser.addObject("line Only", lineOnly);
 		chooser.addObject("Center Gear Right -->", center_lineRight);
 		chooser.addObject("Side gear and shoot",  rightShoot);
-		chooser.addObject("Airship Right Gear", gearRight);
+		//chooser.addObject("Airship Right Gear", gearRight);
 		chooser.addObject("Center Gear and Shoot", centerShoot);
 		chooser.addObject("Mid Right Gear", midRight);
 		chooser.addObject("Mid Left Gear", midLeft);
-		chooser.addObject("Test PID", pidTest);
-		chooser.addObject("81in", in81);
+		//chooser.addObject("Test PID", pidTest);
+		//chooser.addObject("81in", in81);
 	}
 
 	public void doAutonomous(){
@@ -384,8 +384,8 @@ public class autonomous {
 				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 				
-				if(DriveTrain.readEncoderL() >= 102 || DriveTrain.readEncoderR() >= 102){
-					DriveTrain.turn(-60);
+				if(DriveTrain.readEncoderL() >= 106 || DriveTrain.readEncoderR() >= 106){
+					DriveTrain.turn(-63);
 					midRight_forward1  = true;
 					DriveTrain.stop();
 					DriveTrain.resetEncoders();
@@ -432,8 +432,8 @@ public class autonomous {
 				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 				
-				if(DriveTrain.readEncoderL() >= 102 || DriveTrain.readEncoderR() >= 102){
-					DriveTrain.turn(60);
+				if(DriveTrain.readEncoderL() >= 106 || DriveTrain.readEncoderR() >= 106){
+					DriveTrain.turn(63);
 					midLeft_forward1  = true;
 					DriveTrain.stop();
 					DriveTrain.resetEncoders();
@@ -540,12 +540,12 @@ public class autonomous {
 				DriveTrain.pidForward(.6);
 				Robot.outputSensors();
 				
-				if(DriveTrain.readEncoderL() >= 102 || DriveTrain.readEncoderR() >= 102){
+				if(DriveTrain.readEncoderL() >= 106 || DriveTrain.readEncoderR() >= 106){
 					if (isRed == true){
-						DriveTrain.turn(-65);
+						DriveTrain.turn(-63);
 					}
 					if(isRed == false){
-						DriveTrain.turn(65);
+						DriveTrain.turn(63);
 					}
 					RshootForward1  = true;
 					DriveTrain.stop();
@@ -576,7 +576,7 @@ public class autonomous {
 					if(DriveTrain.readEncoderL() <= -60 || DriveTrain.readEncoderR() <= -60){
 						 DriveTrain.stop();
 						Mechanisms.gearClosed();
-						Mechanisms.shooterOn(.8);
+						Mechanisms.shooterOn(.75);
 						DriveTrain.resetEncoders();
 						DriveTrain.zeroYaw();
 						if(isRed == true){
@@ -643,10 +643,10 @@ public class autonomous {
 		case pidTest:
 			Robot.outputSensors();
 			if(pid_forward1 == false){
-				DriveTrain.pidForward(.6);
+				DriveTrain.pidBackward(-.5);
 				Robot.outputSensors();
 			
-				if(DriveTrain.readEncoderL() >= 81 || DriveTrain.readEncoderR() >= 81){
+				if(DriveTrain.readEncoderL() <= -81 || DriveTrain.readEncoderR() <= -81){
 					pid_forward1 = true;
 					DriveTrain.stop();
 					DriveTrain.resetEncoders();

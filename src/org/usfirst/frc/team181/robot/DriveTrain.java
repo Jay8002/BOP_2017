@@ -57,10 +57,10 @@ public class DriveTrain {
 			DriveTrain.moveLR(-speed, -speed);
 		}
 		if(DriveTrain.readEncoderL() < DriveTrain.readEncoderR()){
-			DriveTrain.moveLR(-speed + .05, -speed);
+			DriveTrain.moveLR(-speed - 0.05, -speed);
 		}
 		if(DriveTrain.readEncoderL() > DriveTrain.readEncoderR()){
-			DriveTrain.moveLR(-speed - 0.05, -speed);
+			DriveTrain.moveLR(-speed + 0.05, -speed);
 		}
 	}
 	
@@ -71,17 +71,45 @@ public class DriveTrain {
 		robotDrive.tankDrive(l, r);
 	}
 
+	
+	public static void straightButton(){
+		
+	}
+	
+	public static void visionTurn(){
+
+		for(double center = testing_stuff.getCenter(); center < ((Robot.IMG_WIDTH/2)-10) || center > ((Robot.IMG_WIDTH/2)+10); ){
+	
+			if(center > (Robot.IMG_WIDTH/2)){
+				move(0, -.25);
+			}
+			if(center < (Robot.IMG_WIDTH/2)){
+				move(0, .25);
+			}
+		}
+	
+	
+	}
 	/*public static void move (){
 		// (DriveTrain.readEncoderL() <= clicks && DriveTrain.readEncoderR() <= clicks){
 			DriveTrain.move(-0.7, 0);
 		//}
 	}
 	*/
+	
+	public static void teleopCorrect(double speed){
+		if(joyStick.getY() < 0 && joyStick.getY() < 0){
+			pidForward(speed);
+		}
+		if(joyStick.getY() > 0 && joyStick.getY() > 0){
+			pidBackward(speed);
+		}
+	}
 	public static void joyMove() {
 		robotDrive.arcadeDrive(joyStick.getY(), -joyStick.getZ());
 	}
 	
-	public static void turn(int angle){
+	public static void turn(double angle){
 		//Zero out and get the Yaw of the robot from the Gyro
 		for (double i = getYaw();  i >= angle+5 || i <= angle-5 ; i = getYaw()){
 			

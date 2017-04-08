@@ -29,7 +29,7 @@ public class Robot extends IterativeRobot {
 	DriverStation.Alliance color;
 	private Camera1 cam;
 	//private Camera2 cam2;
-	public static final int IMG_WIDTH = 640;
+	public static final int IMG_WIDTH = 240;
 	public static final int IMG_HEIGHT = 480;
 	
 	private VisionThread visionThread;
@@ -134,7 +134,12 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		outputSensors();
-		DriveTrain.joyMove();
+		//if(joyStick.joystick.getRawButton(2) == false){
+			DriveTrain.joyMove();
+		//}
+		//if(joyStick.joystick.getRawButton(2) == true){
+		//	DriveTrain.teleopCorrect(joyStick.getY());
+		//}
 		joyStick.doButtons();
 		double rectX1;
 		double rectX2;
