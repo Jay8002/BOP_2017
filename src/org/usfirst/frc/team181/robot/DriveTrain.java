@@ -78,7 +78,7 @@ public class DriveTrain {
 	
 	public static void visionTurn(){
 
-		for(double center = testing_stuff.getCenter(); center < ((Robot.IMG_WIDTH/2)-10) || center > ((Robot.IMG_WIDTH/2)+10); ){
+		for(double center = Vision.getCenter(); center < ((Robot.IMG_WIDTH/2)-10) || center > ((Robot.IMG_WIDTH/2)+10); ){
 	
 			if(center > (Robot.IMG_WIDTH/2)){
 				move(0, -.25);
