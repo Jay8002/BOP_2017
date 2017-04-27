@@ -41,7 +41,15 @@ public class joyStick {
 		if(opStick.getRawButton(2) == false && gear_open == true){
 			Mechanisms.gearClosed();
 			gear_open = false;
-		}	 		 			
+		}	
+		if(joystick.getRawButton(2) == true && gear_open == false){
+			Mechanisms.gearOpen();
+			gear_open = true;
+		}
+		if(joystick.getRawButton(2) == false && gear_open == false){
+			Mechanisms.gearClosed();
+			gear_open = false;
+		}
 		if(opStick.getRawButton(1) == true) {
 			Mechanisms.shooterOn();
 		}

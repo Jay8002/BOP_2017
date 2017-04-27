@@ -134,13 +134,15 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		outputSensors();
-		//if(joyStick.joystick.getRawButton(2) == false){
+		if(joyStick.getZ() < -0.04 || joyStick.getZ() > 0.04 || DriveTrain.highGear == true){
 			DriveTrain.joyMove();
-		//}
-		//if(joyStick.joystick.getRawButton(2) == true){
-		//	DriveTrain.teleopCorrect(joyStick.getY());
-		//}
+		}
+		else{
+			DriveTrain.teleopCorrect(-joyStick.getY());
+		}
 		joyStick.doButtons();
+		
+		/*
 		double rectX1;
 		double rectX2;
 		double centerX;
@@ -153,7 +155,7 @@ public class Robot extends IterativeRobot {
 			System.out.println("r2 is : " + rectX2);
 
 		}
-		
+		*/
 		
 		//put the data on the smart dashboard for the encoders.
 		SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
@@ -162,6 +164,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Yaw: ", DriveTrain.getYaw());
 		SmartDashboard.putNumber("Shooter Power", Mechanisms.convertThrottle());
 		SmartDashboard.putNumber("Servo Position", Mechanisms.getServoAngle());
+		SmartDashboard.putNumber("Joystick Y", joyStick.getY());
+		SmartDashboard.putNumber("Joystick Z", joyStick.getZ());
 	}
 
 	
@@ -171,7 +175,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		
+		outputSensors();
 		//System.out.println(joyStick.joystick.getRawButton(1));
 		//System.out.println(DriveTrain.getYaw());
 		
@@ -191,6 +195,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Yaw: ", DriveTrain.getYaw());
 		SmartDashboard.putNumber("Left Rate per Second", DriveTrain.rateEncoderL());
 		SmartDashboard.putNumber("Right Rate per Second", DriveTrain.rateEncoderR());
+		SmartDashboard.putNumber("Joystick Y", joyStick.getY());
+		SmartDashboard.putNumber("Joystick Z", joyStick.getZ());
 	}
 }
 

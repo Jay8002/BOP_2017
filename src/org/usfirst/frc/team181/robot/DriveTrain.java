@@ -136,11 +136,17 @@ public class DriveTrain {
 		return (clicks * 0.0552);
 	}
 	public static void highGear() {
+		resetEncoders();
 		doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+		highGear = true;
+		resetEncoders();
 	}
 	
 	public static void lowGear() {
+		resetEncoders();
 		doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+		highGear = false;
+		resetEncoders();
 	}
 	
 	public static double readEncoderL() {
