@@ -2,7 +2,7 @@ package org.usfirst.frc.team181.robot;
 
 import edu.wpi.first.wpilibj.networktables.*;
 
-public class testing_stuff extends Thread{
+public class Vision extends Thread{
 	
 	NetworkTable table;
 	double defaultArray [] = new double [0];
@@ -10,7 +10,7 @@ public class testing_stuff extends Thread{
 	double [] y;
 	static double top;
 	static double bottom;
-	public testing_stuff(){
+	public Vision(){
 		table = NetworkTable.getTable("GRIP/myContoursReport");
 	}
 	
