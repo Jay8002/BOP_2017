@@ -216,7 +216,7 @@ public class autonomous {
 				else if (centerShoot_backUp2 == false){
 					DriveTrain.pidBackward(-.5);
 					Robot.outputSensors();
-					if(DriveTrain.readEncoderL() <= -48 || DriveTrain.readEncoderR() <= -48){
+					if(DriveTrain.readEncoderL() <= -45 || DriveTrain.readEncoderR() <= -45){
 						centerShoot_backUp2 = true;
 						DriveTrain.stop();
 						DriveTrain.resetEncoders();
@@ -580,10 +580,10 @@ public class autonomous {
 						DriveTrain.resetEncoders();
 						DriveTrain.zeroYaw();
 						if(isRed == true){
-							DriveTrain.turn(20);
+							DriveTrain.turn(15);
 						}
 						if (isRed == false){
-							DriveTrain.turn(-20);
+							DriveTrain.turn(-15);
 						}
 						//Mechanisms.agitateFuel();
 						Mechanisms.openShooter();

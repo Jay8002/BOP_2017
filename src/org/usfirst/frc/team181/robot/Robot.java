@@ -25,7 +25,11 @@ import edu.wpi.first.wpilibj.vision.VisionThread;
  */
 public class Robot extends IterativeRobot {
 
+	public SendableChooser<String> users = new SendableChooser<>();
+	final String twoUsers = "twoUsers";
+	final String singleUser = "singleUser";
 
+	
 	DriverStation.Alliance color;
 	private Camera1 cam;
 	//private Camera2 cam2;
@@ -69,13 +73,17 @@ public class Robot extends IterativeRobot {
 		//cam2.start();
 		
 		
-		    
+		users.addDefault("Two Users", twoUsers);
+		users.addObject("Single User", singleUser);
+		
+		SmartDashboard.putData("Number of Users", users);    
 		    
 		//Zero out and get the Yaw of the robot from the Gyro
 		DriveTrain.zeroYaw();
 		double Kp = 0.03;
 		
-	
+		
+
 		
 		
 	}
@@ -134,13 +142,18 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		outputSensors();
-		if(joyStick.getZ() < -0.04 || joyStick.getZ() > 0.04 || DriveTrain.highGear == true){
+		if(joyStick.getZ() < -0.04 || joyStick.getZ() > 0.04){
 			DriveTrain.joyMove();
 		}
 		else{
 			DriveTrain.teleopCorrect(-joyStick.getY());
 		}
-		joyStick.doButtons();
+		joyStick.doJoyButtons();
+		
+		if(users.getSelected() == twoUsers){
+			joyStick.doOpButtons();		
+			}
+		
 		
 		/*
 		double rectX1;
@@ -162,7 +175,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());		
 		SmartDashboard.putBoolean("Gyro Calibrating", DriveTrain.isCalibrating());
 		SmartDashboard.putNumber("Yaw: ", DriveTrain.getYaw());
-		SmartDashboard.putNumber("Shooter Power", Mechanisms.convertThrottle());
+		SmartDashboard.putNumber("Shooter Power OpStick", Mechanisms.convertThrottle(joyStick.getOpSlider()));
+		SmartDashboard.putNumber("Shooter Power Driver Stick", Mechanisms.convertThrottle(joyStick.getOpSlider()));
 		SmartDashboard.putNumber("Servo Position", Mechanisms.getServoAngle());
 		SmartDashboard.putNumber("Joystick Y", joyStick.getY());
 		SmartDashboard.putNumber("Joystick Z", joyStick.getZ());

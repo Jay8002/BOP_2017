@@ -41,25 +41,25 @@ public class DriveTrain {
 	}
 	
 	public static void pidForward (double speed){
-		if(DriveTrain.readEncoderL() == DriveTrain.readEncoderR()){
+		if(DriveTrain.rateEncoderL() == DriveTrain.rateEncoderR()){
 			DriveTrain.moveLR(-speed, -speed);
 		}
-		if(DriveTrain.readEncoderL() > DriveTrain.readEncoderR()){
+		if(DriveTrain.rateEncoderL() > DriveTrain.rateEncoderR()){
 			DriveTrain.moveLR(-speed + .05, -speed);
 		}
-		if(DriveTrain.readEncoderL() < DriveTrain.readEncoderR()){
+		if(DriveTrain.rateEncoderL() < DriveTrain.rateEncoderR()){
 			DriveTrain.moveLR(-speed - 0.05, -speed);
 		}
 	}
 	
 	public static void pidBackward (double speed){
-		if(DriveTrain.readEncoderL() == DriveTrain.readEncoderR()){
+		if(DriveTrain.rateEncoderL() == DriveTrain.rateEncoderR()){
 			DriveTrain.moveLR(-speed, -speed);
 		}
-		if(DriveTrain.readEncoderL() < DriveTrain.readEncoderR()){
+		if(DriveTrain.rateEncoderL() < DriveTrain.rateEncoderR()){
 			DriveTrain.moveLR(-speed - 0.05, -speed);
 		}
-		if(DriveTrain.readEncoderL() > DriveTrain.readEncoderR()){
+		if(DriveTrain.rateEncoderL() > DriveTrain.rateEncoderR()){
 			DriveTrain.moveLR(-speed + 0.05, -speed);
 		}
 	}
@@ -164,6 +164,7 @@ public class DriveTrain {
 	public static void resetEncoders() {
 		leftEncoder.reset();
 		rightEncoder.reset();
+		
 	}
 	
 	public static void zeroYaw(){

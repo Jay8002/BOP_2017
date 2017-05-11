@@ -19,7 +19,7 @@ public class joyStick {
 	JoystickButton openShooter = new JoystickButton(opStick, 12);
 	JoystickButton closeShooter = new JoystickButton(opStick, 11);
 	
-	public static void doButtons(){
+	public static void doJoyButtons(){
 		if(joystick.getRawButton(1) == true && highGear == false){
 			System.out.println("Engaging High Gear!");
 			DriveTrain.highGear();
@@ -34,30 +34,24 @@ public class joyStick {
 		if (joystick.getRawButton(3) == true) {
 			DriveTrain.resetEncoders();
 		}
-		if(opStick.getRawButton(2) == true && gear_open == false){
-			Mechanisms.gearOpen();
-			gear_open = true;
-		}
-		if(opStick.getRawButton(2) == false && gear_open == true){
-			Mechanisms.gearClosed();
-			gear_open = false;
-		}	
+		
 		if(joystick.getRawButton(2) == true && gear_open == false){
 			Mechanisms.gearOpen();
 			gear_open = true;
 		}
-		if(joystick.getRawButton(2) == false && gear_open == false){
+		if(joystick.getRawButton(2) == false && gear_open == true){
 			Mechanisms.gearClosed();
 			gear_open = false;
 		}
-		if(opStick.getRawButton(1) == true) {
-			Mechanisms.shooterOn();
-		}
-		if(opStick.getRawButton(1) == false) {
-			Mechanisms.shooterOff();
-		}
 		
-		System.out.println("button state"+joystick.getRawButton(7));
+		if(opStick.getRawButton(1) == false){
+			if(joystick.getRawButton(9) == true) {
+				Mechanisms.shooterOn(getDriverSlider());
+			}
+			if(joystick.getRawButton(9) == false) {
+				Mechanisms.shooterOff();
+			}
+		}
 		
 		if (joystick.getRawButton(8) == true && climbing == false && processing == false){ 
 			processing = true;
@@ -71,15 +65,33 @@ public class joyStick {
 			climbing = false;
 			processing = false;
 		}
-		if(opStick.getRawButton(7) == true){
-			Mechanisms.agitateFuel();
+		if(joystick.getRawButton(11) == true){
+			Mechanisms.closeShooter();
 		}
-		if(opStick.getRawButton(8) == true){
-			Mechanisms.unagitateFuel();
+		if(joystick.getRawButton(12) == true){
+			Mechanisms.openShooter();
 		}
-		if(opStick.getRawButton(9) == true){
-			Mechanisms.reverseAgitate();
+	}
+	
+	public static void doOpButtons(){
+		if(opStick.getRawButton(2) == true && gear_open == false){
+			Mechanisms.gearOpen();
+			gear_open = true;
 		}
+		if(opStick.getRawButton(2) == false && gear_open == true){
+			Mechanisms.gearClosed();
+			gear_open = false;
+		}	
+		
+		if(joystick.getRawButton(9) == false){
+			if(opStick.getRawButton(1) == true) {
+				Mechanisms.shooterOn(getOpSlider());
+			}
+			if(opStick.getRawButton(1) == false) {
+				Mechanisms.shooterOff();
+			}
+		}
+		
 		if(opStick.getRawButton(11) == true){
 			Mechanisms.closeShooter();
 		}
@@ -87,8 +99,6 @@ public class joyStick {
 			Mechanisms.openShooter();
 		}
 	}
-	
-	
 
 
 	public static double getY(){
@@ -98,8 +108,10 @@ public class joyStick {
 	public static double getZ(){	
 		return joystick.getZ();
 	}
-	public static double getSlider() {
-		return opStick.getThrottle();
+	public static double getOpSlider() {
+		return Mechanisms.convertThrottle(opStick.getThrottle());
 	}
-	
+	public static double getDriverSlider() {
+		return Mechanisms.convertThrottle(joystick.getThrottle());
+	}
 }

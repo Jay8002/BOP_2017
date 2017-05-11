@@ -35,8 +35,8 @@ public class Mechanisms{
 	public static void gearClosed (){
 		gearSolenoid.set(DoubleSolenoid.Value.kReverse);
 	}
-	public static void shooterOn() {
-		shooterMotor.set(convertThrottle());
+	public static void OpShooterOn() {
+		shooterMotor.set(convertThrottle(joyStick.getOpSlider()));
 	}
 	public static void shooterOn(double speed){
 		shooterMotor.set(speed);
@@ -56,7 +56,7 @@ public class Mechanisms{
 	public static void reverseAgitate(){
 		fuelAgitator.set(-1);
 	}
-	public static double convertThrottle(){
-		return .8*(1-(joyStick.getSlider()+1)/2)+1*((joyStick.getSlider()+1)/2);
+	public static double convertThrottle(double slider){
+		return .8*(1-(slider+1)/2)+1*((slider+1)/2);
 	}
 }
