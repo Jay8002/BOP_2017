@@ -1,3 +1,9 @@
+//Created by Matthew Shelto and Laila Yost in 2017
+
+//This class is needed and can not be renamed. It is where the robot looks for instructions.
+//Certain methods are essential and can not be renamed, as the robot looks for them for different modes.
+
+
 package org.usfirst.frc.team181.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -24,30 +30,32 @@ import edu.wpi.first.wpilibj.vision.VisionThread;
  * directory.
  */
 public class Robot extends IterativeRobot {
-
-	public SendableChooser<String> users = new SendableChooser<>();
-	final String twoUsers = "twoUsers";
-	final String singleUser = "singleUser";
-
 	
+	//Create needed variables
+	
+	//Determines What side of the field the robot is on (Important for autonomous)
 	DriverStation.Alliance color;
+	
+	//Makes A Instance of Camera classes, which is a thread.
 	private Camera1 cam;
 	//private Camera2 cam2;
+	
+	//Public non-changable variables telling Camera dimentions.
 	public static final int IMG_WIDTH = 240;
 	public static final int IMG_HEIGHT = 480;
 	
+	//Makes Instance of Vision Thread class
 	private VisionThread visionThread;
+	
+	//sets up variables for vision processing ARE THESE NEEDED?
 	private double centerX = 0.0;
 	private double rectX1;
 	private double rectX2;
 	
-	private final Object imgLock = new Object();
 	
-	double goalDistance = 0;
-	double totalDistance = 0;
-	
-	
+	//Makes instance of autonomous class
 	autonomous autonomous = new autonomous();
+	//IS NEEDED ??
 	String autoSelected;
 
 	
@@ -57,37 +65,25 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-
+		//Display the autonomous mode chooser on the Smart Dashboard.
 		SmartDashboard.putData("Auto choices", autonomous.chooser);
+		
 		DriveTrain.setup();
 		
+		//Reset all of the mechanical devices and pnumatics when the robot starts up.
 		DriveTrain.lowGear();
 		Mechanisms.servoClosed();
 		
-		//start cam1
+		//start streaming the camera in a new thread.
 		cam = new Camera1("camStream");
 		cam.start();
 			
-		//start cam2
-		//cam2 = new Camera2("camStream2");
-		//cam2.start();
-		
-		
-		users.addDefault("Two Users", twoUsers);
-		users.addObject("Single User", singleUser);
-		
-		SmartDashboard.putData("Number of Users", users);    
-		    
 		//Zero out and get the Yaw of the robot from the Gyro
 		DriveTrain.zeroYaw();
-		double Kp = 0.03;
-		
-		
-
-		
-		
+				
 	}
 
+	
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select
 	 * between different autonomous modes using the dashboard. The sendable
@@ -100,21 +96,30 @@ public class Robot extends IterativeRobot {
 	 * SendableChooser make sure to add them to the chooser code above as well.
 	 */
 	@Override
+	//This Method is automaticly called by the robot when autonomous mode is about to start.
 	public void autonomousInit() {
+		//Put the choices for autonomous mode on the SmartDashboard
 		SmartDashboard.putData("Auto choices", autonomous.chooser);
 		
+		//What alliance color are we?
 		color= DriverStation.getInstance().getAlliance();
 		
+		//Send the color we are to a variable in the autonomous class
 		if (color == DriverStation.Alliance.Blue){
 			autonomous.isRed = false;
 		}
 		if(color == DriverStation.Alliance.Red){
 			autonomous.isRed = true;
 		}
+		
+		//used for debugging
 		System.out.println("Auto selected: " + autoSelected);
+		
+		//Make sure the endocers read 0
 		DriveTrain.resetEncoders();
-		//Zero out and get the Yaw of the robot from the Gyro
+		//Zero out and get the angle of the robot from the Gyro
 		DriveTrain.zeroYaw();
+		//Det up DriveTrain and close all mechanisms
 		DriveTrain.setup();
 		Mechanisms.gearClosed();
 		Mechanisms.servoClosed();
@@ -122,14 +127,14 @@ public class Robot extends IterativeRobot {
 	}
 
 	/**
-	 * This function is called periodically during autonomous
+	 * This function is called in a infinite loop during autonomous. It only ends when autonomous does.
 	 */
 	@Override
 	public void autonomousPeriodic() {
 		autonomous.doAutonomous();
 }
 	
-	
+	//Robot calls this method when teleop is about ot start.
 	public void teleopInit(){
 		DriveTrain.zeroYaw();
 		DriveTrain.setup();
@@ -137,24 +142,27 @@ public class Robot extends IterativeRobot {
 	}
 
 	/**
-	 * This function is called periodically during operator control
+	 * This function is called in an infinate loop during teleop. It only ends when teleop does.
 	 */
 	@Override
 	public void teleopPeriodic() {
+		//Show sensor data on SmartDashboard
 		outputSensors();
+		//If the joystick is being turned drive normally.
 		if(joyStick.getZ() < -0.04 || joyStick.getZ() > 0.04){
+			DriveTrain.resetEncoders();
 			DriveTrain.joyMove();
 		}
+		//If the joystick is not being turned, use the drive straight program to prevent curving.
 		else{
-			DriveTrain.teleopCorrect(-joyStick.getY());
+			DriveTrain.teleopCorrectD(-joyStick.getY());
 		}
-		joyStick.doJoyButtons();
+		//Check if any buttons are being pressed on the Driver or Operator Joysticks
+		joyStick.doJoyButtons();	
+		//joyStick.doOpButtons();		
+
 		
-		if(users.getSelected() == twoUsers){
-			joyStick.doOpButtons();		
-			}
-		
-		
+		//Used for an old Vision Test program IS THIS NEEDED??
 		/*
 		double rectX1;
 		double rectX2;
@@ -185,7 +193,7 @@ public class Robot extends IterativeRobot {
 	
 
 	/**
-	 * This function is called periodically during test mode
+	 * This function is called in an infinate loop during test mode. Will not end untill test mode does.
 	 */
 	@Override
 	public void testPeriodic() {
@@ -203,6 +211,7 @@ public class Robot extends IterativeRobot {
 		*/
 	}
 	
+	//Displays different debug data onto the Smart Dashboardd.
 	public static void outputSensors(){
 		SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
 		SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());

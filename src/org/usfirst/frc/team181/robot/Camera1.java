@@ -1,3 +1,8 @@
+// this program was created by Matthew Shelto and Laila Yost in 2017
+// This class is responsible for controlling a camera attached into the robo rio.
+//We usually put the output on the smart dashboard
+//The comments are the same as the Camera2.java file.
+
 package org.usfirst.frc.team181.robot;
 
 import org.opencv.core.Mat;
