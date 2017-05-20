@@ -27,7 +27,7 @@ public class Mechanisms{
 	
 	//variables for state of mechanisms
 	static boolean gear_closed = true;
-	
+	static boolean lock_closed = false;
 
 	public static void openShooter (){
 		shootDoor.setAngle(0);
@@ -39,9 +39,11 @@ public class Mechanisms{
 	
 	public static void servoClosed(){
 		climberServo.setAngle(38);
+		lock_closed = true;
 	}
 	public static void servoOpen(){
 		climberServo.setAngle(90);
+		lock_closed = false;
 	}
 	
 	//A pnumatic Solenoid works on air pressure. Forward pushes air through.

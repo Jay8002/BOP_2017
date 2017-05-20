@@ -213,6 +213,7 @@ public class Robot extends IterativeRobot {
 	
 	//Displays different debug data onto the Smart Dashboardd.
 	public static void outputSensors(){
+		SmartDashboard.putBoolean("Lock closed", Mechanisms.lock_closed);
 		SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
 		SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
 		SmartDashboard.putNumber("Yaw: ", DriveTrain.getYaw());
