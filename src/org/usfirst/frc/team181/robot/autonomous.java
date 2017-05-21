@@ -602,13 +602,13 @@ public class autonomous {
 				DriveTrain.pidForwardDistance(.6);
 				Robot.outputSensors();
 				
-				if(DriveTrain.readEncoderL() >= 106 || DriveTrain.readEncoderR() >= 106){
+				if(DriveTrain.readEncoderL() >= 109 || DriveTrain.readEncoderR() >= 109){
 					//if red turn left 63 degrees. If blue other direction
 					if (isRed == true){
-						DriveTrain.turn(-63);
+						DriveTrain.turn(-60);
 					}
 					if(isRed == false){
-						DriveTrain.turn(63);
+						DriveTrain.turn(60);
 					}
 					RshootForward1  = true;
 					DriveTrain.stop();
