@@ -650,10 +650,10 @@ public class autonomous {
 						DriveTrain.zeroYaw();
 						//if we are red turn 15 degrees right if not other direction
 						if(isRed == true){
-							DriveTrain.turn(15);
+							DriveTrain.turn(17);
 						}
 						if (isRed == false){
-							DriveTrain.turn(-15);
+							DriveTrain.turn(-17);
 						}
 						//Mechanisms.agitateFuel(); We removed the agitator
 						

@@ -197,23 +197,15 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		outputSensors();
-		//System.out.println(joyStick.joystick.getRawButton(1));
-		//System.out.println(DriveTrain.getYaw());
-		
-		/*try to do the following command
-		try {
-			Arduino.readOnce();
-		//If it does not work do the following
-		} catch (IOException e) {
-			System.out.println("ERROR Reading From Arduino!");
+		if(joyStick.joystick.getRawButton(10) == true){
+			Mechanisms.autoShoot();
 		}
-		*/
 	}
 	
 	//Displays different debug data onto the Smart Dashboardd.
 	public static void outputSensors(){
-		SmartDashboard.putBoolean("Lock closed", Mechanisms.lock_closed);
+		
+		SmartDashboard.putBoolean("Lock closed", Mechanisms.lock_open);
 		SmartDashboard.putNumber("Left Distance", DriveTrain.readEncoderL());
 		SmartDashboard.putNumber("Right Distance", DriveTrain.readEncoderR());
 		SmartDashboard.putNumber("Yaw: ", DriveTrain.getYaw());

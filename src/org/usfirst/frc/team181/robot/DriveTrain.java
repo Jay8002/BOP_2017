@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import com.kauailabs.navx.frc.AHRS;
 
 public class DriveTrain {
+	
 	//create two speed controllers for right and left.
 	static SpeedController driveTrainLeft = new VictorSP(0);
 	static SpeedController driveTrainRight = new VictorSP(1);
@@ -29,6 +30,9 @@ public class DriveTrain {
 	//create DoubleSolenoids for gears.
 	static DoubleSolenoid doubleSolenoid = new DoubleSolenoid(0,0,1);
 	static boolean highGear = false;
+	
+	//tells when to stop running vision turn
+	static boolean targeting = false;
 	
 	//set up the drive train for use.
 	public static void setup(){
@@ -106,9 +110,12 @@ public class DriveTrain {
 	// turn using vision targeting from the raspberry pi. THIS HAS NOT BEEN TESTED
 	public static void visionTurn(){
 
-		//get the centerpoint between two targets. turn until that point is in the center of the camera.
-		for(double center = Vision.getCenter(); center < ((Robot.IMG_WIDTH/2)-10) || center > ((Robot.IMG_WIDTH/2)+10); ){
+		//get the center point between two targets. turn until that point is in the center of the camera.
+		for(Double center = Vision.getCenter(); center < ((Robot.IMG_WIDTH/2)-10) || center > ((Robot.IMG_WIDTH/2)+10) || center == null && targeting == true; center=Vision.getCenter()){
 	
+			if(center.equals(null)){
+				targeting = false;
+			}
 			if(center > (Robot.IMG_WIDTH/2)){
 				move(0, -.25);
 			}
@@ -117,6 +124,7 @@ public class DriveTrain {
 			}
 		}
 	
+		targeting = false;
 	
 	}
 	/*public static void move (){

@@ -8,6 +8,7 @@ package org.usfirst.frc.team181.robot;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Timer;
 
 
 public class Mechanisms{
@@ -27,7 +28,7 @@ public class Mechanisms{
 	
 	//variables for state of mechanisms
 	static boolean gear_closed = true;
-	static boolean lock_closed = false;
+	static boolean lock_open = false;
 
 	public static void openShooter (){
 		shootDoor.setAngle(0);
@@ -39,11 +40,11 @@ public class Mechanisms{
 	
 	public static void servoClosed(){
 		climberServo.setAngle(38);
-		lock_closed = true;
+		lock_open = false;
 	}
 	public static void servoOpen(){
 		climberServo.setAngle(90);
-		lock_closed = false;
+		lock_open = true;
 	}
 	
 	//A pnumatic Solenoid works on air pressure. Forward pushes air through.
@@ -69,6 +70,19 @@ public class Mechanisms{
 	}
 	public static double getServoAngle(){
 		return climberServo.getAngle();
+	}
+	//used in auto to align and shoot at boiler
+	public static void autoShoot(){
+		DriveTrain.targeting = true;
+		DriveTrain.visionTurn();
+		while(DriveTrain.targeting == true){}
+		Mechanisms.shooterOn(.76);
+		Timer.delay(2);
+		Mechanisms.openShooter();
+		Timer.delay(12);
+		Mechanisms.shooterOff();
+		Timer.delay(1);
+		Mechanisms.closeShooter();
 	}
 	//The agitator is no longer on the robot.
 	/*
