@@ -44,9 +44,7 @@ public class Robot extends IterativeRobot {
 	public static final int IMG_WIDTH = 240;
 	public static final int IMG_HEIGHT = 480;
 	
-	//Makes Instance of Vision Thread class
-	private VisionThread visionThread;
-	
+
 	//sets up variables for vision processing ARE THESE NEEDED?
 	private double centerX = 0.0;
 	private double rectX1;
@@ -75,8 +73,8 @@ public class Robot extends IterativeRobot {
 		Mechanisms.servoClosed();
 		
 		//start streaming the camera in a new thread.
-		cam = new Camera1("camStream");
-		cam.start();
+		//cam = new Camera1("camStream");
+		//cam.start();
 			
 		//Zero out and get the Yaw of the robot from the Gyro
 		DriveTrain.zeroYaw();
@@ -197,9 +195,9 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		if(joyStick.joystick.getRawButton(10) == true){
-			Mechanisms.autoShoot();
-		}
+		
+		
+		
 	}
 	
 	//Displays different debug data onto the Smart Dashboardd.

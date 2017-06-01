@@ -34,7 +34,7 @@ public class autonomous {
 	final String midLeft = "Mid Left Gear";
 	final String pidTest = "Test PID";
 	final String in81 = "81in";
-	
+	final String visionTest = "visionTest";
 	//CONSOLODATE THESE BOOLEANS. PLEASE!!
 	
 	//for centerShoot
@@ -125,6 +125,8 @@ public class autonomous {
 	//stores what side of the field we are on.
 	boolean isRed = false;
 	
+	public Vision vision;
+	
 	//when class is instantiated create all the chooser buttons. Set do nothing to default.
 	public autonomous(){
 		chooser.addDefault("Do nothing", doNothing);
@@ -141,6 +143,10 @@ public class autonomous {
 		chooser.addObject("Mid Left Gear", midLeft);
 		//chooser.addObject("Test PID", pidTest);
 		//chooser.addObject("81in", in81);
+		chooser.addObject("Vision Test", visionTest);
+		vision = new Vision();
+		vision.start();
+
 	}
 
 	//actually does autonomous
@@ -758,7 +764,13 @@ public class autonomous {
 					DriveTrain.resetEncoders();
 				}
 			}
-			}
+			
+		case visionTest:
+			//DriveTrain.visionTurn();
+			System.out.println(Vision.getCenter());
+		
+		
+	}
 			
 	}	
 }

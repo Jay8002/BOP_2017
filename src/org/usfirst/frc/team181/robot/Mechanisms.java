@@ -71,19 +71,7 @@ public class Mechanisms{
 	public static double getServoAngle(){
 		return climberServo.getAngle();
 	}
-	//used in auto to align and shoot at boiler
-	public static void autoShoot(){
-		DriveTrain.targeting = true;
-		DriveTrain.visionTurn();
-		while(DriveTrain.targeting == true){}
-		Mechanisms.shooterOn(.76);
-		Timer.delay(2);
-		Mechanisms.openShooter();
-		Timer.delay(12);
-		Mechanisms.shooterOff();
-		Timer.delay(1);
-		Mechanisms.closeShooter();
-	}
+
 	//The agitator is no longer on the robot.
 	/*
 	public static void agitateFuel(){

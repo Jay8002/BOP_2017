@@ -111,7 +111,7 @@ public class DriveTrain {
 	public static void visionTurn(){
 
 		//get the center point between two targets. turn until that point is in the center of the camera.
-		for(Double center = Vision.getCenter(); center < ((Robot.IMG_WIDTH/2)-10) || center > ((Robot.IMG_WIDTH/2)+10) || center == null && targeting == true; center=Vision.getCenter()){
+		for(Double center = Vision.getCenter(); center < ((Robot.IMG_WIDTH/2)) || center > ((Robot.IMG_WIDTH/2)) || center == null && targeting == true; center=Vision.getCenter()){
 	
 			if(center.equals(null)){
 				targeting = false;

@@ -12,16 +12,18 @@ import edu.wpi.first.wpilibj.networktables.*;
 
 //Is a seperate thread
 public class Vision extends Thread{
-	//initialize variables
-	NetworkTable table;
-	double defaultArray [] = new double [0];
-	double [] x;
+	static //initialize variables
+	public NetworkTable table;
+	static double [] defaultArray = new double [1];
+	double [] x = new double [10];
 	double [] y;
-	static double top;
-	static double bottom;
-	
+	static double left;
+	static double right;
+	double [] testArray = new double [10];
 
 	public Vision(){
+		defaultArray [0] = 1.0;
+		NetworkTable.setIPAddress("10.1.81.2");		
 		//Get the network table made by GRIP
 		table = NetworkTable.getTable("GRIP/myContoursReport");
 	}
@@ -30,17 +32,22 @@ public class Vision extends Thread{
 	public void run(){
 		//infinite loop
 		while(true){
-			//Get the x position of all detected objects. Put them in an array.
-			x = table.getNumberArray("centerX", defaultArray); 
-			
-			//figure out which stored object is higher up. Store variables appropriately.
-			if(x[0] > x[1]){
-				top = x[0];
-				bottom =x[1];
+			try{
+				//Get the x position of all detected objects. Put them in an array.
+				x = table.getNumberArray("centerX", defaultArray); 
+				//figure out which stored object is higher up. Store variables appropriately.
+				if(x[0] > x[1]){
+					left = x[1];
+					right =x[0];
+				}
+				if(x[0] < x[1]){
+					left = x[0];
+					right = x[1];
+				}
+				
 			}
-			if(x[1] > x[0]){
-				top = x[1];
-				bottom = x[0];
+			catch(ArrayIndexOutOfBoundsException exception){
+			
 			}
 		}
 			
@@ -49,10 +56,11 @@ public class Vision extends Thread{
 	//Return the centerpoint between both objects.
 	public static double getCenter(){
 		
-		double center = (bottom - top)/2.0;
+		double center = (right + left)/2.0;
 		
 		return center;
 	}
+	
 	
 }
 
