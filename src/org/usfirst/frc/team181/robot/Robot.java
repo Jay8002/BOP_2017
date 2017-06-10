@@ -31,6 +31,9 @@ import edu.wpi.first.wpilibj.vision.VisionThread;
  */
 public class Robot extends IterativeRobot {
 	
+	Vision vision;
+
+	
 	//Create needed variables
 	
 	//Determines What side of the field the robot is on (Important for autonomous)
@@ -78,7 +81,10 @@ public class Robot extends IterativeRobot {
 			
 		//Zero out and get the Yaw of the robot from the Gyro
 		DriveTrain.zeroYaw();
-				
+			
+		//vision = new Vision();
+		//vision.start();
+		
 	}
 
 	

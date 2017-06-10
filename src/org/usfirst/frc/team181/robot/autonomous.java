@@ -125,7 +125,6 @@ public class autonomous {
 	//stores what side of the field we are on.
 	boolean isRed = false;
 	
-	public Vision vision;
 	
 	//when class is instantiated create all the chooser buttons. Set do nothing to default.
 	public autonomous(){
@@ -143,9 +142,9 @@ public class autonomous {
 		chooser.addObject("Mid Left Gear", midLeft);
 		//chooser.addObject("Test PID", pidTest);
 		//chooser.addObject("81in", in81);
-		chooser.addObject("Vision Test", visionTest);
-		vision = new Vision();
-		vision.start();
+		
+		//chooser.addObject("Vision Test", visionTest);
+
 
 	}
 
@@ -764,10 +763,11 @@ public class autonomous {
 					DriveTrain.resetEncoders();
 				}
 			}
-			
+			//a mode for testing out the vision targeting.
 		case visionTest:
-			//DriveTrain.visionTurn();
 			System.out.println(Vision.getCenter());
+			DriveTrain.visionTurn();
+
 		
 		
 	}

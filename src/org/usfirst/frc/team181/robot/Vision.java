@@ -10,6 +10,7 @@ package org.usfirst.frc.team181.robot;
 
 import edu.wpi.first.wpilibj.networktables.*;
 
+
 //Is a seperate thread
 public class Vision extends Thread{
 	static //initialize variables
@@ -20,7 +21,7 @@ public class Vision extends Thread{
 	static double left;
 	static double right;
 	double [] testArray = new double [10];
-
+	static double center;
 	public Vision(){
 		defaultArray [0] = 1.0;
 		NetworkTable.setIPAddress("10.1.81.2");		
@@ -30,8 +31,8 @@ public class Vision extends Thread{
 	
 	//While the thread is running...
 	public void run(){
-		//infinite loop
-		while(true){
+		//loop if thread is not having problems
+		while(!Thread.interrupted()){
 			try{
 				//Get the x position of all detected objects. Put them in an array.
 				x = table.getNumberArray("centerX", defaultArray); 
@@ -46,19 +47,30 @@ public class Vision extends Thread{
 				}
 				
 			}
+			//If there are not enough contours detected.
 			catch(ArrayIndexOutOfBoundsException exception){
-			
+			System.out.println("Not enough contours have been detected.");
 			}
 		}
-			
+		if(Thread.interrupted()){
+			System.out.println("The vision thread was inturrupted. error. warning?");
+		}
 	}
 	
 	//Return the centerpoint between both objects.
 	public static double getCenter(){
 		
-		double center = (right + left)/2.0;
+		center = (right + left)/2.0;
+		
+		center = convertCenter(center);
 		
 		return center;
+	}
+	
+	//convert the centerpoint from a scale of -1 to 1. zero is in the center of the camera.
+	public static double convertCenter(double center){
+		double output = -(1-(center/256))+(center/256);
+		return output;
 	}
 	
 	

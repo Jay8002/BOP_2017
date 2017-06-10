@@ -107,24 +107,21 @@ public class DriveTrain {
 		robotDrive.tankDrive(l, r);
 	}
 
-	// turn using vision targeting from the raspberry pi. THIS HAS NOT BEEN TESTED
+	// turn using vision targeting from the raspberry pi. THIS HAS NOT BEEN TESTED. DOES NOT WORK (NO CLUE WHY)
 	public static void visionTurn(){
 
 		//get the center point between two targets. turn until that point is in the center of the camera.
-		for(Double center = Vision.getCenter(); center < ((Robot.IMG_WIDTH/2)) || center > ((Robot.IMG_WIDTH/2)) || center == null && targeting == true; center=Vision.getCenter()){
+		for(double center = Vision.getCenter(); center > .05 || center < -.05; center=Vision.getCenter()){
 	
-			if(center.equals(null)){
-				targeting = false;
-			}
-			if(center > (Robot.IMG_WIDTH/2)){
+			if(center > .05){
 				move(0, -.25);
 			}
-			if(center < (Robot.IMG_WIDTH/2)){
+			if(center < -.05){
 				move(0, .25);
 			}
 		}
 	
-		targeting = false;
+		//targeting = false;
 	
 	}
 	/*public static void move (){
