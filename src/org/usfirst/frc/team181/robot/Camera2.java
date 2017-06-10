@@ -1,3 +1,6 @@
+//Created by Matthew Shelto and Laila Yost in 2017
+//This class is run as a seperate thread, that controls a second camera attached to the robo rio.
+// We never used this.
 package org.usfirst.frc.team181.robot;
 
 import org.opencv.core.Mat;
@@ -15,20 +18,23 @@ public class Camera2 extends Thread {
 	private String streamname2;
 	private UsbCamera camera2;
 	
+	//when setting up the camera start capturing automatically
 	public Camera2(String streamname) {
 		this.streamname2 = streamname;
 		camera2 = CameraServer.getInstance().startAutomaticCapture();
 	}
-	
+	// when the thread is started 
 	public void run() {
+		//set the camera resolution
 		camera2.setResolution(Robot.IMG_WIDTH, Robot.IMG_HEIGHT);
-
+		//get the stream and output it.
 		CvSink cvSink = CameraServer.getInstance().getVideo();
 		CvSource outputStream = CameraServer.getInstance().putVideo(streamname2, 640, 480);
 
 		Mat mat = new Mat();
-		
+		//while the thread is still running
 		while (!Thread.interrupted()) {
+			//if a frame can not be found, throw an error.
 			if (cvSink.grabFrame(mat) == 0) {
 				outputStream.notifyError(cvSink.getError());
 				continue;
